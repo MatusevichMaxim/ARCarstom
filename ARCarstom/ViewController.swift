@@ -10,6 +10,10 @@ import UIKit
 import SceneKit
 import ARKit
 
+enum CategoryBitMask: Int {
+    case categoryToSelect = 2
+}
+
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
@@ -20,6 +24,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var planeNode = SCNNode()
     var wheelNode = SCNNode()
     var wheelMaterial = SCNMaterial()
+    
+    var selectedNode : SCNNode?
+    
+    var wheelAdded : Bool = false
     
     
     // MARK: Base methods
@@ -33,6 +41,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         setupUi()
         setupMaterials()
+        
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressed))
+        sceneView.addGestureRecognizer(longPressRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,6 +71,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard !wheelAdded else { return }
+        
         if let touch = touches.first {
             let touchLocation = touch.location(in: sceneView)
             
@@ -67,11 +80,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             if let hitResult = results.first {
                 let wheelScene = SCNScene(named: "art.scnassets/rim2.scn")!
                 if let childNode = wheelScene.rootNode.childNode(withName: "rim2", recursively: true) {
+                    wheelNode = SCNNode()
                     wheelNode = childNode
                     wheelNode.position = SCNVector3(0, 0, 0)
                     wheelNode.scale = SCNVector3(0.2, 0.2, 0.2)
                     wheelNode.eulerAngles.y = -.pi / 2
                     wheelNode.geometry?.materials = [wheelMaterial]
+                    wheelNode.categoryBitMask = CategoryBitMask.categoryToSelect.rawValue
+                    wheelAdded = true
                     
                     planeNode.addChildNode(wheelNode)
                 }
@@ -122,5 +138,33 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         planeNode.geometry = plane
         
         return planeNode
+    }
+    
+    // MARK: Translate object
+    
+    @objc func onLongPressed(recognizer: UILongPressGestureRecognizer) {
+        guard let recognizerView = recognizer.view as? ARSCNView else { return }
+        let touch = recognizer.location(in: recognizerView)
+        
+        if recognizer.state == .began {
+            let hitTestResult = sceneView.hitTest(touch, options: [SCNHitTestOption.categoryBitMask: CategoryBitMask.categoryToSelect.rawValue])
+            guard let hitNode = hitTestResult.first?.node else { return }
+
+            self.selectedNode = hitNode
+        } else if recognizer.state == .changed {
+            guard let hitNode = selectedNode else { return }
+            
+            // perform a hitTest to obtain the plane
+            let hitTestPlane = sceneView.hitTest(touch, types: .existingPlane)
+            guard let hitPlane = hitTestPlane.first else { return }
+            
+            hitNode.position = SCNVector3(hitPlane.localTransform.columns.3.x,
+                                          -hitPlane.localTransform.columns.3.z,
+                                          hitNode.position.z)
+        } else if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+            print("ended.")
+            guard selectedNode != nil else { return }
+            self.selectedNode = nil
+        }
     }
 }
