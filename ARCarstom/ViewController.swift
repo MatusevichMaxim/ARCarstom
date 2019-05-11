@@ -15,6 +15,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
     
+    // MARK: Base methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,6 +45,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let planeNode = createPlane(withPlaneAnchor: planeAnchor)
         node.addChildNode(planeNode)
     }
+    
+    // MARK: Plane creation
     
     func createPlane(withPlaneAnchor planeAnchor: ARPlaneAnchor) -> SCNNode {
         let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
