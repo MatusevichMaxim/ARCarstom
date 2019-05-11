@@ -19,6 +19,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var planeNode = SCNNode()
     var wheelNode = SCNNode()
+    var wheelMaterial = SCNMaterial()
     
     
     // MARK: Base methods
@@ -31,6 +32,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.autoenablesDefaultLighting = true
         
         setupUi()
+        setupMaterials()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,6 +71,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     wheelNode.position = SCNVector3(0, 0, 0)
                     wheelNode.scale = SCNVector3(0.2, 0.2, 0.2)
                     wheelNode.eulerAngles.y = -.pi / 2
+                    wheelNode.geometry?.materials = [wheelMaterial]
                     
                     planeNode.addChildNode(wheelNode)
                 }
@@ -83,6 +86,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         radiusSlider.addTarget(self, action: #selector(onRadiusChanged), for: UIControl.Event.valueChanged)
         depthSlider.addTarget(self, action: #selector(onDepthChanged), for: UIControl.Event.valueChanged)
+    }
+    
+    func setupMaterials() {
+        wheelMaterial.lightingModel = .physicallyBased
+        wheelMaterial.metalness.contents = 1.0
+        wheelMaterial.roughness.contents = 0
     }
     
     // MARK: Sliders behaviour
