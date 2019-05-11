@@ -1,37 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="ARCarstom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="U0K-SW-4ec">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </arscnView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lq7-sq-pSX">
+                                <rect key="frame" x="20" y="720" width="374" height="142"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vt2-dc-ss5">
+                                        <rect key="frame" x="30" y="35.5" width="52" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Depth" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LT8-YX-OhD">
+                                        <rect key="frame" x="30" y="88.5" width="47" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="dpc-iT-kCK" userLabel="RadiusSlider">
+                                        <rect key="frame" x="131" y="30" width="215" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="211" id="fpn-Dq-hha"/>
+                                            <constraint firstAttribute="height" constant="29" id="qow-zn-thD"/>
+                                        </constraints>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="1IT-lX-ep5" userLabel="DepthSlider">
+                                        <rect key="frame" x="131" y="83" width="215" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="29" id="M9m-al-VKG"/>
+                                            <constraint firstAttribute="width" constant="211" id="qw5-BI-6UY"/>
+                                        </constraints>
+                                    </slider>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="1IT-lX-ep5" firstAttribute="leading" relation="lessThanOrEqual" secondItem="LT8-YX-OhD" secondAttribute="trailing" constant="56" id="1Vx-lb-L1I"/>
+                                    <constraint firstItem="Vt2-dc-ss5" firstAttribute="leading" secondItem="Lq7-sq-pSX" secondAttribute="leading" constant="30" id="9IT-gN-GcX"/>
+                                    <constraint firstAttribute="trailing" secondItem="1IT-lX-ep5" secondAttribute="trailing" constant="30" id="GHh-kw-Rod"/>
+                                    <constraint firstItem="LT8-YX-OhD" firstAttribute="centerY" secondItem="1IT-lX-ep5" secondAttribute="centerY" id="L61-iy-KZH"/>
+                                    <constraint firstAttribute="trailing" secondItem="dpc-iT-kCK" secondAttribute="trailing" constant="30" id="WAL-gy-mWP"/>
+                                    <constraint firstItem="dpc-iT-kCK" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Vt2-dc-ss5" secondAttribute="trailing" constant="51" id="ceW-Ru-c4f"/>
+                                    <constraint firstItem="LT8-YX-OhD" firstAttribute="leading" secondItem="Lq7-sq-pSX" secondAttribute="leading" constant="30" id="cpC-gl-QnJ"/>
+                                    <constraint firstAttribute="height" constant="142" id="f4e-AW-jGw"/>
+                                    <constraint firstItem="dpc-iT-kCK" firstAttribute="top" secondItem="Lq7-sq-pSX" secondAttribute="top" constant="30" id="g58-WI-paG"/>
+                                    <constraint firstAttribute="bottom" secondItem="1IT-lX-ep5" secondAttribute="bottom" constant="30" id="k3r-gr-Qs8"/>
+                                    <constraint firstItem="Vt2-dc-ss5" firstAttribute="centerY" secondItem="dpc-iT-kCK" secondAttribute="centerY" id="yEA-IC-VrR"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Lq7-sq-pSX" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="20" id="Cqr-fV-mDh"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
+                            <constraint firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="hOm-G2-aIe"/>
+                            <constraint firstItem="Lq7-sq-pSX" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="ifH-Wv-3GZ"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="Lq7-sq-pSX" secondAttribute="trailing" constant="20" id="mzz-Rt-11i"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
                     <connections>
+                        <outlet property="depthSlider" destination="1IT-lX-ep5" id="SeA-jb-XCh"/>
+                        <outlet property="radiusSlider" destination="dpc-iT-kCK" id="C0t-gJ-d1Z"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="settingsPanel" destination="Lq7-sq-pSX" id="oo1-yJ-vCJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="105.80357142857143"/>
         </scene>
     </scenes>
 </document>
