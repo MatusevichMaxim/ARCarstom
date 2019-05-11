@@ -20,12 +20,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var settingsPanel: UIView!
     @IBOutlet var radiusSlider: UISlider!
     @IBOutlet var depthSlider: UISlider!
+    @IBOutlet var maskSwitch: UISwitch!
     
     var planeNode = SCNNode()
     var wheelNode = SCNNode()
     var wheelMaterial = SCNMaterial()
     
     var selectedNode : SCNNode?
+    var maskNode : SCNNode?
     
     var wheelAdded : Bool = false
     
@@ -61,6 +63,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         radiusSlider.removeTarget(self, action: #selector(onRadiusChanged), for: UIControl.Event.valueChanged)
         depthSlider.removeTarget(self, action: #selector(onDepthChanged), for: UIControl.Event.valueChanged)
+        maskSwitch.removeTarget(self, action: #selector(onMaskVisibilityChanged), for: UIControl.Event.valueChanged)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
@@ -77,8 +80,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let touchLocation = touch.location(in: sceneView)
             
             let results = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
-            if let hitResult = results.first {
-                let wheelScene = SCNScene(named: "art.scnassets/rim2.scn")!
+            if results.first != nil {
+                let wheelScene = SCNScene(named: "scnassets/rim2.scn")!
                 if let childNode = wheelScene.rootNode.childNode(withName: "rim2", recursively: true) {
                     wheelNode = SCNNode()
                     wheelNode = childNode
@@ -88,6 +91,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     wheelNode.geometry?.materials = [wheelMaterial]
                     wheelNode.categoryBitMask = CategoryBitMask.categoryToSelect.rawValue
                     wheelAdded = true
+                    hidePlane()
+                    
+                    maskNode = createMask()
+                    wheelNode.addChildNode(maskNode!)
+                    maskNode!.position = SCNVector3(-wheelNode.scale.z / 2, 0, 0)
+                    maskNode!.eulerAngles.y = .pi / 2
+                    maskNode!.geometry?.firstMaterial?.transparency = 0
                     
                     planeNode.addChildNode(wheelNode)
                 }
@@ -102,6 +112,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         radiusSlider.addTarget(self, action: #selector(onRadiusChanged), for: UIControl.Event.valueChanged)
         depthSlider.addTarget(self, action: #selector(onDepthChanged), for: UIControl.Event.valueChanged)
+        maskSwitch.addTarget(self, action: #selector(onMaskVisibilityChanged), for: UIControl.Event.valueChanged)
     }
     
     func setupMaterials() {
@@ -110,7 +121,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         wheelMaterial.roughness.contents = 0
     }
     
-    // MARK: Sliders behaviour
+    // MARK: Controlls behaviour
     
     @objc func onRadiusChanged() {
         let startScale = SCNVector3(0.2, 0.2, 0.2)
@@ -123,13 +134,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         wheelNode.position = SCNVector3(0, 0, 0 + depthSlider.value / 10)
     }
     
-    // MARK: Plane creation
+    @objc func onMaskVisibilityChanged() {
+        if maskSwitch.isOn {
+            UIView.animate(withDuration: 1, animations: {
+                self.maskNode!.geometry?.firstMaterial?.transparency = 1
+            })
+        } else {
+            UIView.animate(withDuration: 1, animations: {
+                self.maskNode!.geometry?.firstMaterial?.transparency = 0
+            })
+        }
+    }
+    
+    // MARK: Plane behaviour
     
     func createPlane(withPlaneAnchor planeAnchor: ARPlaneAnchor) -> SCNNode {
         let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
         
         let gridMaterial = SCNMaterial()
-        gridMaterial.diffuse.contents = UIImage(named: "art.scnassets/wheelgrid.png")
+        gridMaterial.diffuse.contents = UIImage(named: "scnassets/wheelgrid.png")
         plane.materials = [gridMaterial]
         
         let planeNode = SCNNode()
@@ -138,6 +161,26 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         planeNode.geometry = plane
         
         return planeNode
+    }
+    
+    func hidePlane() {
+        UIView.animate(withDuration: 1, animations: {
+            self.planeNode.geometry?.firstMaterial?.transparency = 0
+        })
+        
+        self.sceneView.debugOptions = []
+    }
+    
+    func createMask() -> SCNNode {
+        let maskPlane = SCNPlane(width: CGFloat(wheelNode.scale.x * 4.5), height: CGFloat(wheelNode.scale.y * 4.5))
+        let maskMaterial = SCNMaterial()
+        maskMaterial.diffuse.contents = UIImage(named: "scnassets/mask.png")
+        maskPlane.materials = [maskMaterial]
+        
+        let node = SCNNode()
+        node.geometry = maskPlane
+        
+        return node
     }
     
     // MARK: Translate object
@@ -162,7 +205,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                                           -hitPlane.localTransform.columns.3.z,
                                           hitNode.position.z)
         } else if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
-            print("ended.")
             guard selectedNode != nil else { return }
             self.selectedNode = nil
         }
