@@ -23,6 +23,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var depthSlider: UISlider!
     @IBOutlet var maskSwitch: UISwitch!
     
+    let wheelDiameter : CGFloat = 0.3
+    let portalDiameter : CGFloat = 0.126
+    
     var planeNode = SCNNode()
     var container = SCNNode()
     var wheelNode = SCNNode()
@@ -70,6 +73,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        
         planeNode = createPlane(withPlaneAnchor: planeAnchor)
         node.addChildNode(planeNode)
     }
@@ -82,7 +86,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
             let results = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
             if results.first != nil {
-                let portal = PortalMask(radius: 0.042)
+                let portal = PortalMask(radius: portalDiameter)
                 container.addChildNode(portal)
                 
                 let wheelScene = SCNScene(named: "scnassets/rim.scn")!
@@ -90,7 +94,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     wheelNode = SCNNode()
                     wheelNode = childNode
                     wheelNode.position = SCNVector3(0, 0, 0)
-                    wheelNode.scale = SCNVector3(0.1, 0.1, 0.1)
+                    wheelNode.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
                     wheelNode.eulerAngles.y = -.pi / 2
                     wheelNode.geometry?.materials = [wheelMaterial]
                     wheelNode.categoryBitMask = CategoryBitMask.categoryToSelect.rawValue
@@ -105,7 +109,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
                     container.addChildNode(wheelNode)
                 }
-                
+            
                 planeNode.addChildNode(container)
             }
         }
@@ -197,7 +201,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         if recognizer.state == .began {
             let hitTestResult = sceneView.hitTest(touch, options: [SCNHitTestOption.categoryBitMask: CategoryBitMask.categoryToSelect.rawValue])
-            guard let hitNode = hitTestResult.first?.node else { return }
+            guard let hitNode = hitTestResult.first?.node.parent else { return }
 
             self.selectedNode = hitNode
         } else if recognizer.state == .changed {
