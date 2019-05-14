@@ -1,0 +1,6 @@
+framework module PortalMask {
+  umbrella header "PortalMask-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,824 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3F56FA4FBD1ACF0148DBFB76C440F034 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */; };
+		473770E47BB66A914840AFB9207D0E8C /* PortalMask-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D00EF521F71D6324B15A16F1A728D13B /* PortalMask-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		47CD111E87596C6EF26D6221DDEFAA26 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */; };
+		4F777D0AF3910FDFBE6701F4E89E0503 /* PureLayout-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E283BBE99A94039E40E471FC71ABED /* PureLayout-dummy.m */; };
+		64141CB4DCEC05C7C17057A8FE96974C /* PureLayoutDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE86A2FECDE6328FEC72B43F57FDFB8 /* PureLayoutDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6AFD237D7C42C3901976028416BB3588 /* NSLayoutConstraint+PureLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 137F574C8BFAD2F92BC92BBF5124CA4C /* NSLayoutConstraint+PureLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		85D803DC22B68AC5421016D29C406E1D /* Pods-ARCarstom-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D51DD5BFADB82FD3A81581600191B800 /* Pods-ARCarstom-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		95160D06E6B457C2B554206391D93B13 /* PureLayout-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C1377773BE3535E8E03DD1102D94EA6 /* PureLayout-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		99756F9A57C8FFE3FBD6C5E0F0015573 /* Pods-ARCarstom-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0256F476D3C3305AD9AC5F027D7668B5 /* Pods-ARCarstom-dummy.m */; };
+		A232D6E9435AFFE673139BEBF2785A40 /* PureLayout+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F8096E256B55EC87151E869C2CC3C02 /* PureLayout+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ACB72ABCB47A1C3CEA022973BC394F7E /* PortalMask-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A17F808CA22D64AA5023E9BDE1C528 /* PortalMask-dummy.m */; };
+		ADD2C410CE086A88D89B63A595B4AA46 /* NSArray+PureLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = FFB47741A3C4E6B7A868492996C823D1 /* NSArray+PureLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3CC0AECD3BDAF8EC98C85AA9F562B1D /* NSArray+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = C733BC354A6F519E4420249A4E9063A2 /* NSArray+PureLayout.m */; };
+		B9D758F711BF358A0D58654281A46732 /* ALView+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CDECB9F5E86ADF651AFA82DE7DAAF0F2 /* ALView+PureLayout.m */; };
+		C02587CB7210D91C73E1418E0AAE8D64 /* ALView+PureLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCA81E951A798A14C3DC805F9121D65 /* ALView+PureLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6FE50837BFC5D8D1B5469A15260F9DE /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519D0A5A64BA37734A1048BC5AF7B472 /* UIBezierPath+Extensions.swift */; };
+		C79F8A114C4832AB0AE90F4A0E38C0C3 /* PureLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = A119FF13D8243C0C6EA5673552F14FC9 /* PureLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CD2DA8DB368B656BF3EEBD1CA4E6EEB0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */; };
+		D47866BC9460302DDFAC0C4822EA51D5 /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 251D312B1EEA27E322F9A9A87467FE3B /* NSLayoutConstraint+PureLayout.m */; };
+		F636A27338F32092465346D8FAFBE818 /* PortalMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A822805D7925126FE3E2A7633393C78 /* PortalMask.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		427E6E9368AB24DABA7B98B08B1DC261 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 76656E22CCE42C972E51D8D6A04B17B7;
+			remoteInfo = PortalMask;
+		};
+		DD88C2A593DB8EF40AF8609C1B89CE41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D0493267B2C4CC36327965D9F6000B9C;
+			remoteInfo = PureLayout;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		01568BB7EBE02BAB0130AFA896005E9C /* PureLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = PureLayout.framework; path = PureLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0256F476D3C3305AD9AC5F027D7668B5 /* Pods-ARCarstom-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ARCarstom-dummy.m"; sourceTree = "<group>"; };
+		107B78895CF9AE392E65A9FF25A8B88D /* Pods-ARCarstom-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ARCarstom-Info.plist"; sourceTree = "<group>"; };
+		137F574C8BFAD2F92BC92BBF5124CA4C /* NSLayoutConstraint+PureLayout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSLayoutConstraint+PureLayout.h"; path = "PureLayout/PureLayout/NSLayoutConstraint+PureLayout.h"; sourceTree = "<group>"; };
+		1B575CD16F82A4CB3165BB273C8789DD /* PortalMask.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = PortalMask.modulemap; sourceTree = "<group>"; };
+		1C1377773BE3535E8E03DD1102D94EA6 /* PureLayout-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PureLayout-umbrella.h"; sourceTree = "<group>"; };
+		1F1E29E9C5E18A20C40239CE360477F4 /* PortalMask.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = PortalMask.framework; path = PortalMask.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		20BBCA15B7EF48F7DC99F5CDE7726D94 /* Pods-ARCarstom.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ARCarstom.modulemap"; sourceTree = "<group>"; };
+		21C923ECBC4077A3C925087EECCEFFBF /* PureLayout-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PureLayout-prefix.pch"; sourceTree = "<group>"; };
+		223247885C2B1F1B790C5873CA484A5A /* Pods-ARCarstom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ARCarstom.release.xcconfig"; sourceTree = "<group>"; };
+		251D312B1EEA27E322F9A9A87467FE3B /* NSLayoutConstraint+PureLayout.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSLayoutConstraint+PureLayout.m"; path = "PureLayout/PureLayout/NSLayoutConstraint+PureLayout.m"; sourceTree = "<group>"; };
+		35E527B8757511B23A7DB48A87F6219D /* PureLayout.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = PureLayout.modulemap; sourceTree = "<group>"; };
+		3DCA22ADB9828CB861F4A6A88D250217 /* Pods-ARCarstom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ARCarstom.debug.xcconfig"; sourceTree = "<group>"; };
+		47E283BBE99A94039E40E471FC71ABED /* PureLayout-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PureLayout-dummy.m"; sourceTree = "<group>"; };
+		4949E85270E08FADF8A2DF509687ADAE /* Pods-ARCarstom-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ARCarstom-acknowledgements.markdown"; sourceTree = "<group>"; };
+		4A822805D7925126FE3E2A7633393C78 /* PortalMask.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PortalMask.swift; path = PortalMask/PortalMask.swift; sourceTree = "<group>"; };
+		519D0A5A64BA37734A1048BC5AF7B472 /* UIBezierPath+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIBezierPath+Extensions.swift"; path = "PortalMask/UIBezierPath+Extensions.swift"; sourceTree = "<group>"; };
+		5F8096E256B55EC87151E869C2CC3C02 /* PureLayout+Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "PureLayout+Internal.h"; path = "PureLayout/PureLayout/PureLayout+Internal.h"; sourceTree = "<group>"; };
+		6909918143C3F267084DD86FD227167C /* PortalMask-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "PortalMask-Info.plist"; sourceTree = "<group>"; };
+		9CCA81E951A798A14C3DC805F9121D65 /* ALView+PureLayout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "ALView+PureLayout.h"; path = "PureLayout/PureLayout/ALView+PureLayout.h"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A119FF13D8243C0C6EA5673552F14FC9 /* PureLayout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PureLayout.h; path = PureLayout/PureLayout/PureLayout.h; sourceTree = "<group>"; };
+		A2A17F808CA22D64AA5023E9BDE1C528 /* PortalMask-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PortalMask-dummy.m"; sourceTree = "<group>"; };
+		A740D058E3653CB87413893CA4FC4BD8 /* PortalMask.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PortalMask.xcconfig; sourceTree = "<group>"; };
+		B21DE1BBFCFBE5F42900E7FA5CFAE3E1 /* PureLayout.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PureLayout.xcconfig; sourceTree = "<group>"; };
+		B3D9AA081732BDCFA83870D214FC6C71 /* Pods_ARCarstom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ARCarstom.framework; path = "Pods-ARCarstom.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB19F0D627280E1B2D1C87009B1D58E8 /* Pods-ARCarstom-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ARCarstom-frameworks.sh"; sourceTree = "<group>"; };
+		BBE86A2FECDE6328FEC72B43F57FDFB8 /* PureLayoutDefines.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PureLayoutDefines.h; path = PureLayout/PureLayout/PureLayoutDefines.h; sourceTree = "<group>"; };
+		C733BC354A6F519E4420249A4E9063A2 /* NSArray+PureLayout.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSArray+PureLayout.m"; path = "PureLayout/PureLayout/NSArray+PureLayout.m"; sourceTree = "<group>"; };
+		CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		CDECB9F5E86ADF651AFA82DE7DAAF0F2 /* ALView+PureLayout.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "ALView+PureLayout.m"; path = "PureLayout/PureLayout/ALView+PureLayout.m"; sourceTree = "<group>"; };
+		CE7E416625E377C1467BEA1F4409B85D /* Pods-ARCarstom-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ARCarstom-acknowledgements.plist"; sourceTree = "<group>"; };
+		D00EF521F71D6324B15A16F1A728D13B /* PortalMask-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PortalMask-umbrella.h"; sourceTree = "<group>"; };
+		D51DD5BFADB82FD3A81581600191B800 /* Pods-ARCarstom-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ARCarstom-umbrella.h"; sourceTree = "<group>"; };
+		D6925CA3293C5355CCC5FEC44423E0DC /* PureLayout-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "PureLayout-Info.plist"; sourceTree = "<group>"; };
+		E6F8BE837208933B5834D403FF3B7217 /* PortalMask-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PortalMask-prefix.pch"; sourceTree = "<group>"; };
+		FFB47741A3C4E6B7A868492996C823D1 /* NSArray+PureLayout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSArray+PureLayout.h"; path = "PureLayout/PureLayout/NSArray+PureLayout.h"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6F1AF9C68620B02BE4755C7691E3C82A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47CD111E87596C6EF26D6221DDEFAA26 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FB36AC651DBC64B886F25AE255F7462 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD2DA8DB368B656BF3EEBD1CA4E6EEB0 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9312DEECEA502528B91BD5DA75955B88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F56FA4FBD1ACF0148DBFB76C440F034 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43369042FDCF350C9DEDAF3CA7648027 /* PureLayout */ = {
+			isa = PBXGroup;
+			children = (
+				9CCA81E951A798A14C3DC805F9121D65 /* ALView+PureLayout.h */,
+				CDECB9F5E86ADF651AFA82DE7DAAF0F2 /* ALView+PureLayout.m */,
+				FFB47741A3C4E6B7A868492996C823D1 /* NSArray+PureLayout.h */,
+				C733BC354A6F519E4420249A4E9063A2 /* NSArray+PureLayout.m */,
+				137F574C8BFAD2F92BC92BBF5124CA4C /* NSLayoutConstraint+PureLayout.h */,
+				251D312B1EEA27E322F9A9A87467FE3B /* NSLayoutConstraint+PureLayout.m */,
+				A119FF13D8243C0C6EA5673552F14FC9 /* PureLayout.h */,
+				5F8096E256B55EC87151E869C2CC3C02 /* PureLayout+Internal.h */,
+				BBE86A2FECDE6328FEC72B43F57FDFB8 /* PureLayoutDefines.h */,
+				8C3CEE4C87F51F31206DE04145D12560 /* Support Files */,
+			);
+			name = PureLayout;
+			path = PureLayout;
+			sourceTree = "<group>";
+		};
+		50EFFC947597261B10A4EA9EC773E70B /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				F3CB469F751A56E16F15998717EA5065 /* Pods-ARCarstom */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		5D72B81E214567958487905C1B302E9F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8CF6D19C56D8BAAE5AB557A33DFAD877 /* PortalMask */,
+				43369042FDCF350C9DEDAF3CA7648027 /* PureLayout */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8C3CEE4C87F51F31206DE04145D12560 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				35E527B8757511B23A7DB48A87F6219D /* PureLayout.modulemap */,
+				B21DE1BBFCFBE5F42900E7FA5CFAE3E1 /* PureLayout.xcconfig */,
+				47E283BBE99A94039E40E471FC71ABED /* PureLayout-dummy.m */,
+				D6925CA3293C5355CCC5FEC44423E0DC /* PureLayout-Info.plist */,
+				21C923ECBC4077A3C925087EECCEFFBF /* PureLayout-prefix.pch */,
+				1C1377773BE3535E8E03DD1102D94EA6 /* PureLayout-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/PureLayout";
+			sourceTree = "<group>";
+		};
+		8CF6D19C56D8BAAE5AB557A33DFAD877 /* PortalMask */ = {
+			isa = PBXGroup;
+			children = (
+				4A822805D7925126FE3E2A7633393C78 /* PortalMask.swift */,
+				519D0A5A64BA37734A1048BC5AF7B472 /* UIBezierPath+Extensions.swift */,
+				8F513A07AEA87EEF94A7D676093B0D88 /* Support Files */,
+			);
+			name = PortalMask;
+			path = PortalMask;
+			sourceTree = "<group>";
+		};
+		8F513A07AEA87EEF94A7D676093B0D88 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				1B575CD16F82A4CB3165BB273C8789DD /* PortalMask.modulemap */,
+				A740D058E3653CB87413893CA4FC4BD8 /* PortalMask.xcconfig */,
+				A2A17F808CA22D64AA5023E9BDE1C528 /* PortalMask-dummy.m */,
+				6909918143C3F267084DD86FD227167C /* PortalMask-Info.plist */,
+				E6F8BE837208933B5834D403FF3B7217 /* PortalMask-prefix.pch */,
+				D00EF521F71D6324B15A16F1A728D13B /* PortalMask-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/PortalMask";
+			sourceTree = "<group>";
+		};
+		954C247157E1B0386389B7F58B101F46 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B3D9AA081732BDCFA83870D214FC6C71 /* Pods_ARCarstom.framework */,
+				1F1E29E9C5E18A20C40239CE360477F4 /* PortalMask.framework */,
+				01568BB7EBE02BAB0130AFA896005E9C /* PureLayout.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9B055D0CFEA43187E72B03DED11F5662 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
+				5D72B81E214567958487905C1B302E9F /* Pods */,
+				954C247157E1B0386389B7F58B101F46 /* Products */,
+				50EFFC947597261B10A4EA9EC773E70B /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9B055D0CFEA43187E72B03DED11F5662 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F3CB469F751A56E16F15998717EA5065 /* Pods-ARCarstom */ = {
+			isa = PBXGroup;
+			children = (
+				20BBCA15B7EF48F7DC99F5CDE7726D94 /* Pods-ARCarstom.modulemap */,
+				4949E85270E08FADF8A2DF509687ADAE /* Pods-ARCarstom-acknowledgements.markdown */,
+				CE7E416625E377C1467BEA1F4409B85D /* Pods-ARCarstom-acknowledgements.plist */,
+				0256F476D3C3305AD9AC5F027D7668B5 /* Pods-ARCarstom-dummy.m */,
+				BB19F0D627280E1B2D1C87009B1D58E8 /* Pods-ARCarstom-frameworks.sh */,
+				107B78895CF9AE392E65A9FF25A8B88D /* Pods-ARCarstom-Info.plist */,
+				D51DD5BFADB82FD3A81581600191B800 /* Pods-ARCarstom-umbrella.h */,
+				3DCA22ADB9828CB861F4A6A88D250217 /* Pods-ARCarstom.debug.xcconfig */,
+				223247885C2B1F1B790C5873CA484A5A /* Pods-ARCarstom.release.xcconfig */,
+			);
+			name = "Pods-ARCarstom";
+			path = "Target Support Files/Pods-ARCarstom";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		0ECC26E243A0DFDCE3782BB9F48B09B4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C02587CB7210D91C73E1418E0AAE8D64 /* ALView+PureLayout.h in Headers */,
+				ADD2C410CE086A88D89B63A595B4AA46 /* NSArray+PureLayout.h in Headers */,
+				6AFD237D7C42C3901976028416BB3588 /* NSLayoutConstraint+PureLayout.h in Headers */,
+				A232D6E9435AFFE673139BEBF2785A40 /* PureLayout+Internal.h in Headers */,
+				95160D06E6B457C2B554206391D93B13 /* PureLayout-umbrella.h in Headers */,
+				C79F8A114C4832AB0AE90F4A0E38C0C3 /* PureLayout.h in Headers */,
+				64141CB4DCEC05C7C17057A8FE96974C /* PureLayoutDefines.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23FB061D939FC6892010D8A39E099C6A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85D803DC22B68AC5421016D29C406E1D /* Pods-ARCarstom-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D231317D22AA1C49D8D359DC00F78F8A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				473770E47BB66A914840AFB9207D0E8C /* PortalMask-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		181E49FA0B02FFE2CFA5DB91A831F1C4 /* Pods-ARCarstom */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BFD2E319FFA58585CA44DE67089E3AE /* Build configuration list for PBXNativeTarget "Pods-ARCarstom" */;
+			buildPhases = (
+				23FB061D939FC6892010D8A39E099C6A /* Headers */,
+				88B21779A3A0274BE2A6E852642DCDEB /* Sources */,
+				8FB36AC651DBC64B886F25AE255F7462 /* Frameworks */,
+				619F876545FC1238061513BC25A94B37 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3B82BAA67014D4B2F9A310593B1BC645 /* PBXTargetDependency */,
+				C16F97EA152C612C16115AF6EEBCA4CD /* PBXTargetDependency */,
+			);
+			name = "Pods-ARCarstom";
+			productName = "Pods-ARCarstom";
+			productReference = B3D9AA081732BDCFA83870D214FC6C71 /* Pods_ARCarstom.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		76656E22CCE42C972E51D8D6A04B17B7 /* PortalMask */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4AD13BF3EA4913B309E0F574BCDDD276 /* Build configuration list for PBXNativeTarget "PortalMask" */;
+			buildPhases = (
+				D231317D22AA1C49D8D359DC00F78F8A /* Headers */,
+				3F4E6134B98224C499F0B714EFC0139D /* Sources */,
+				9312DEECEA502528B91BD5DA75955B88 /* Frameworks */,
+				E8645A07D91D710E85507DB972367AB5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PortalMask;
+			productName = PortalMask;
+			productReference = 1F1E29E9C5E18A20C40239CE360477F4 /* PortalMask.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D0493267B2C4CC36327965D9F6000B9C /* PureLayout */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 41100685FFD3DF8D02A52DE0EE61B030 /* Build configuration list for PBXNativeTarget "PureLayout" */;
+			buildPhases = (
+				0ECC26E243A0DFDCE3782BB9F48B09B4 /* Headers */,
+				86EE9DFFDA1FEC395411FD622A3D603B /* Sources */,
+				6F1AF9C68620B02BE4755C7691E3C82A /* Frameworks */,
+				CABBE0204B977DBF2D361C11FD7262FE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PureLayout;
+			productName = PureLayout;
+			productReference = 01568BB7EBE02BAB0130AFA896005E9C /* PureLayout.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 954C247157E1B0386389B7F58B101F46 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				181E49FA0B02FFE2CFA5DB91A831F1C4 /* Pods-ARCarstom */,
+				76656E22CCE42C972E51D8D6A04B17B7 /* PortalMask */,
+				D0493267B2C4CC36327965D9F6000B9C /* PureLayout */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		619F876545FC1238061513BC25A94B37 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CABBE0204B977DBF2D361C11FD7262FE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8645A07D91D710E85507DB972367AB5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3F4E6134B98224C499F0B714EFC0139D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACB72ABCB47A1C3CEA022973BC394F7E /* PortalMask-dummy.m in Sources */,
+				F636A27338F32092465346D8FAFBE818 /* PortalMask.swift in Sources */,
+				C6FE50837BFC5D8D1B5469A15260F9DE /* UIBezierPath+Extensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86EE9DFFDA1FEC395411FD622A3D603B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9D758F711BF358A0D58654281A46732 /* ALView+PureLayout.m in Sources */,
+				B3CC0AECD3BDAF8EC98C85AA9F562B1D /* NSArray+PureLayout.m in Sources */,
+				D47866BC9460302DDFAC0C4822EA51D5 /* NSLayoutConstraint+PureLayout.m in Sources */,
+				4F777D0AF3910FDFBE6701F4E89E0503 /* PureLayout-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		88B21779A3A0274BE2A6E852642DCDEB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99756F9A57C8FFE3FBD6C5E0F0015573 /* Pods-ARCarstom-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3B82BAA67014D4B2F9A310593B1BC645 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PortalMask;
+			target = 76656E22CCE42C972E51D8D6A04B17B7 /* PortalMask */;
+			targetProxy = 427E6E9368AB24DABA7B98B08B1DC261 /* PBXContainerItemProxy */;
+		};
+		C16F97EA152C612C16115AF6EEBCA4CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PureLayout;
+			target = D0493267B2C4CC36327965D9F6000B9C /* PureLayout */;
+			targetProxy = DD88C2A593DB8EF40AF8609C1B89CE41 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4093433A309EFE160336AC736594AB22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		8EE47DE3B473CC2C9019479ABE2C8897 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B21DE1BBFCFBE5F42900E7FA5CFAE3E1 /* PureLayout.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/PureLayout/PureLayout-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PureLayout/PureLayout-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/PureLayout/PureLayout.modulemap";
+				PRODUCT_MODULE_NAME = PureLayout;
+				PRODUCT_NAME = PureLayout;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		924D56B1D59CD3049300EAEEA256114E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.2;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		9BB0A5DFAC109E5368DB2D32B53E7DD4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A740D058E3653CB87413893CA4FC4BD8 /* PortalMask.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/PortalMask/PortalMask-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PortalMask/PortalMask-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/PortalMask/PortalMask.modulemap";
+				PRODUCT_MODULE_NAME = PortalMask;
+				PRODUCT_NAME = PortalMask;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A4EE43BDAFCAC5187E85370652E3A010 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 223247885C2B1F1B790C5873CA484A5A /* Pods-ARCarstom.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A86174EC44E64C0BAC875CA64BA016EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A740D058E3653CB87413893CA4FC4BD8 /* PortalMask.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/PortalMask/PortalMask-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PortalMask/PortalMask-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/PortalMask/PortalMask.modulemap";
+				PRODUCT_MODULE_NAME = PortalMask;
+				PRODUCT_NAME = PortalMask;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CD0CC91AF9067A1398F200E8FBF85EB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3DCA22ADB9828CB861F4A6A88D250217 /* Pods-ARCarstom.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E7D4F4129ED9532920EAFC00062A78DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B21DE1BBFCFBE5F42900E7FA5CFAE3E1 /* PureLayout.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/PureLayout/PureLayout-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PureLayout/PureLayout-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/PureLayout/PureLayout.modulemap";
+				PRODUCT_MODULE_NAME = PureLayout;
+				PRODUCT_NAME = PureLayout;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		41100685FFD3DF8D02A52DE0EE61B030 /* Build configuration list for PBXNativeTarget "PureLayout" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7D4F4129ED9532920EAFC00062A78DA /* Debug */,
+				8EE47DE3B473CC2C9019479ABE2C8897 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4093433A309EFE160336AC736594AB22 /* Debug */,
+				924D56B1D59CD3049300EAEEA256114E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4AD13BF3EA4913B309E0F574BCDDD276 /* Build configuration list for PBXNativeTarget "PortalMask" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A86174EC44E64C0BAC875CA64BA016EE /* Debug */,
+				9BB0A5DFAC109E5368DB2D32B53E7DD4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BFD2E319FFA58585CA44DE67089E3AE /* Build configuration list for PBXNativeTarget "Pods-ARCarstom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD0CC91AF9067A1398F200E8FBF85EB8 /* Debug */,
+				A4EE43BDAFCAC5187E85370652E3A010 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}

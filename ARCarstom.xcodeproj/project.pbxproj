@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		855EBC566F608DA2A35BE96C /* Pods_ARCarstom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */; };
 		8B9A08852286EB160002BEE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A08842286EB160002BEE5 /* AppDelegate.swift */; };
 		8B9A08892286EB160002BEE5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A08882286EB160002BEE5 /* ViewController.swift */; };
 		8B9A088C2286EB160002BEE5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A088A2286EB160002BEE5 /* Main.storyboard */; };
@@ -16,6 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2DF95171F16519515772A046 /* Pods-ARCarstom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARCarstom.release.xcconfig"; path = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.release.xcconfig"; sourceTree = "<group>"; };
+		64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARCarstom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		87B6D79152EB5E75343C8677 /* Pods-ARCarstom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARCarstom.debug.xcconfig"; path = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.debug.xcconfig"; sourceTree = "<group>"; };
 		8B9A08812286EB160002BEE5 /* ARCarstom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARCarstom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9A08842286EB160002BEE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B9A08882286EB160002BEE5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -31,17 +35,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				855EBC566F608DA2A35BE96C /* Pods_ARCarstom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		15C5AB01A60BF5E29C828471 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1C972138F4FB43088D802ADA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				87B6D79152EB5E75343C8677 /* Pods-ARCarstom.debug.xcconfig */,
+				2DF95171F16519515772A046 /* Pods-ARCarstom.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		8B9A08782286EB160002BEE5 = {
 			isa = PBXGroup;
 			children = (
 				8B9A08832286EB160002BEE5 /* ARCarstom */,
 				8B9A08822286EB160002BEE5 /* Products */,
+				1C972138F4FB43088D802ADA /* Pods */,
+				15C5AB01A60BF5E29C828471 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -74,9 +99,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B9A08952286EB160002BEE5 /* Build configuration list for PBXNativeTarget "ARCarstom" */;
 			buildPhases = (
+				3B3E3B6664C5448EBC6082C9 /* [CP] Check Pods Manifest.lock */,
 				8B9A087D2286EB160002BEE5 /* Sources */,
 				8B9A087E2286EB160002BEE5 /* Frameworks */,
 				8B9A087F2286EB160002BEE5 /* Resources */,
+				3CAA5D7D37858795CC4F654A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -133,6 +160,55 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3B3E3B6664C5448EBC6082C9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ARCarstom-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3CAA5D7D37858795CC4F654A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ARCarstom/Pods-ARCarstom-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/PortalMask/PortalMask.framework",
+				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PortalMask.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARCarstom/Pods-ARCarstom-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8B9A087D2286EB160002BEE5 /* Sources */ = {
@@ -284,6 +360,7 @@
 		};
 		8B9A08962286EB160002BEE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87B6D79152EB5E75343C8677 /* Pods-ARCarstom.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -304,6 +381,7 @@
 		};
 		8B9A08972286EB160002BEE5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2DF95171F16519515772A046 /* Pods-ARCarstom.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

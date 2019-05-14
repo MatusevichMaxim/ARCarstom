@@ -9,6 +9,7 @@
 import UIKit
 import SceneKit
 import ARKit
+import PortalMask
 
 enum CategoryBitMask: Int {
     case categoryToSelect = 2
@@ -23,6 +24,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var maskSwitch: UISwitch!
     
     var planeNode = SCNNode()
+    var container = SCNNode()
     var wheelNode = SCNNode()
     var wheelMaterial = SCNMaterial()
     
@@ -68,39 +70,43 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        
         planeNode = createPlane(withPlaneAnchor: planeAnchor)
         node.addChildNode(planeNode)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard !wheelAdded else { return }
-        
+
         if let touch = touches.first {
             let touchLocation = touch.location(in: sceneView)
-            
+
             let results = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
             if results.first != nil {
-                let wheelScene = SCNScene(named: "scnassets/rim2.scn")!
-                if let childNode = wheelScene.rootNode.childNode(withName: "rim2", recursively: true) {
+                let portal = PortalMask(radius: 0.042)
+                container.addChildNode(portal)
+                
+                let wheelScene = SCNScene(named: "scnassets/rim.scn")!
+                if let childNode = wheelScene.rootNode.childNode(withName: "rim", recursively: true) {
                     wheelNode = SCNNode()
                     wheelNode = childNode
                     wheelNode.position = SCNVector3(0, 0, 0)
-                    wheelNode.scale = SCNVector3(0.2, 0.2, 0.2)
+                    wheelNode.scale = SCNVector3(0.1, 0.1, 0.1)
                     wheelNode.eulerAngles.y = -.pi / 2
                     wheelNode.geometry?.materials = [wheelMaterial]
                     wheelNode.categoryBitMask = CategoryBitMask.categoryToSelect.rawValue
                     wheelAdded = true
                     hidePlane()
-                    
+
                     maskNode = createMask()
                     wheelNode.addChildNode(maskNode!)
-                    maskNode!.position = SCNVector3(-wheelNode.scale.z / 2, 0, 0)
+                    maskNode!.position = SCNVector3(-wheelNode.scale.z * 5, 0, 0)
                     maskNode!.eulerAngles.y = .pi / 2
                     maskNode!.geometry?.firstMaterial?.transparency = 0
-                    
-                    planeNode.addChildNode(wheelNode)
+
+                    container.addChildNode(wheelNode)
                 }
+                
+                planeNode.addChildNode(container)
             }
         }
     }
@@ -124,8 +130,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: Controlls behaviour
     
     @objc func onRadiusChanged() {
-        let startScale = SCNVector3(0.2, 0.2, 0.2)
-        wheelNode.scale = SCNVector3(startScale.x + radiusSlider.value / 3,
+        let startScale = SCNVector3(1, 1, 1)
+        container.scale = SCNVector3(startScale.x + radiusSlider.value / 3,
                                      startScale.y + radiusSlider.value / 3,
                                      startScale.z + radiusSlider.value / 3)
     }
@@ -172,7 +178,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func createMask() -> SCNNode {
-        let maskPlane = SCNPlane(width: CGFloat(wheelNode.scale.x * 4.5), height: CGFloat(wheelNode.scale.y * 4.5))
+        let maskPlane = SCNPlane(width: CGFloat(wheelNode.scale.x * 10), height: CGFloat(wheelNode.scale.y * 10))
         let maskMaterial = SCNMaterial()
         maskMaterial.diffuse.contents = UIImage(named: "scnassets/mask.png")
         maskPlane.materials = [maskMaterial]

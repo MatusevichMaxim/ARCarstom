@@ -51,7 +51,7 @@
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="1IT-lX-ep5" userLabel="DepthSlider">
                                         <rect key="frame" x="135" y="56" width="215" height="31"/>
                                     </slider>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="MkP-Hs-swZ">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MkP-Hs-swZ">
                                         <rect key="frame" x="296" y="96" width="51" height="31"/>
                                     </switch>
                                 </subviews>
