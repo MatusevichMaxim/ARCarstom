@@ -69,7 +69,10 @@
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
                     <connections>
+                        <outlet property="autoButton" destination="Cba-3k-kaB" id="xrz-ki-l11"/>
+                        <outlet property="panelView" destination="vvu-xU-fQM" id="V8r-Pf-qge"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="staticButton" destination="6cy-Wk-vDr" id="dsT-Zl-CG6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

@@ -19,9 +19,13 @@ enum CategoryBitMask: Int {
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet var panelView: UIView!
+    @IBOutlet var staticButton: UIImageView!
+    @IBOutlet var autoButton: UIImageView!
     
     var navigationPanel = UIView()
     var settingsButtonView = UIView()
+    var actionButtonView = UIView()
     
     let wheelDiameter : CGFloat = 0.3
     let portalDiameter : CGFloat = 0.126
@@ -114,9 +118,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: Setup
     
     func setupUi() {
-//        radiusSlider.addTarget(self, action: #selector(onRadiusChanged), for: UIControl.Event.valueChanged)
-//        depthSlider.addTarget(self, action: #selector(onDepthChanged), for: UIControl.Event.valueChanged)
-//        maskSwitch.addTarget(self, action: #selector(onMaskVisibilityChanged), for: UIControl.Event.valueChanged)
+        actionButtonView.backgroundColor = UIColor(red: 236, green: 69, blue: 38)
+        actionButtonView.layer.cornerRadius = 33
+        view.addSubview(actionButtonView)
+
+        let actionButtonImage = UIImageView(image: UIImage(named: "ic_add"))
+        actionButtonView.addSubview(actionButtonImage)
+        
+        actionButtonImage.autoCenterInSuperview()
+        actionButtonImage.autoSetDimensions(to: CGSize(width: 24, height: 24))
+        
+        actionButtonView.autoPinEdge(ALEdge.bottom, to: ALEdge.top, of: panelView, withOffset: 38)
+        actionButtonView.autoSetDimensions(to: CGSize(width: 66, height: 66))
+        actionButtonView.autoAlignAxis(toSuperviewAxis: ALAxis.vertical)
     }
     
     func setupMaterials() {
@@ -124,31 +138,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         wheelMaterial.metalness.contents = 1.0
         wheelMaterial.roughness.contents = 0
     }
-    
-    // MARK: Controlls behaviour
-    
-//    @objc func onRadiusChanged() {
-//        let startScale = SCNVector3(1, 1, 1)
-//        container.scale = SCNVector3(startScale.x + radiusSlider.value / 3,
-//                                     startScale.y + radiusSlider.value / 3,
-//                                     startScale.z + radiusSlider.value / 3)
-//    }
-    
-//    @objc func onDepthChanged() {
-//        wheelNode.position = SCNVector3(0, 0, 0 + depthSlider.value / 10)
-//    }
-    
-//    @objc func onMaskVisibilityChanged() {
-//        if maskSwitch.isOn {
-//            UIView.animate(withDuration: 1, animations: {
-//                self.maskNode!.geometry?.firstMaterial?.transparency = 1
-//            })
-//        } else {
-//            UIView.animate(withDuration: 1, animations: {
-//                self.maskNode!.geometry?.firstMaterial?.transparency = 0
-//            })
-//        }
-//    }
     
     // MARK: Plane behaviour
     
