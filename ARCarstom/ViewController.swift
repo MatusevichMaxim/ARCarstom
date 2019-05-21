@@ -10,6 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 import PortalMask
+import PureLayout
 
 enum CategoryBitMask: Int {
     case categoryToSelect = 2
@@ -18,10 +19,9 @@ enum CategoryBitMask: Int {
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet var settingsPanel: UIView!
-    @IBOutlet var radiusSlider: UISlider!
-    @IBOutlet var depthSlider: UISlider!
-    @IBOutlet var maskSwitch: UISwitch!
+    
+    var navigationPanel = UIView()
+    var settingsButtonView = UIView()
     
     let wheelDiameter : CGFloat = 0.3
     let portalDiameter : CGFloat = 0.126
@@ -65,10 +65,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         sceneView.session.pause()
-        
-        radiusSlider.removeTarget(self, action: #selector(onRadiusChanged), for: UIControl.Event.valueChanged)
-        depthSlider.removeTarget(self, action: #selector(onDepthChanged), for: UIControl.Event.valueChanged)
-        maskSwitch.removeTarget(self, action: #selector(onMaskVisibilityChanged), for: UIControl.Event.valueChanged)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
@@ -118,11 +114,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: Setup
     
     func setupUi() {
-        settingsPanel.layer.cornerRadius = 16
-        
-        radiusSlider.addTarget(self, action: #selector(onRadiusChanged), for: UIControl.Event.valueChanged)
-        depthSlider.addTarget(self, action: #selector(onDepthChanged), for: UIControl.Event.valueChanged)
-        maskSwitch.addTarget(self, action: #selector(onMaskVisibilityChanged), for: UIControl.Event.valueChanged)
+//        radiusSlider.addTarget(self, action: #selector(onRadiusChanged), for: UIControl.Event.valueChanged)
+//        depthSlider.addTarget(self, action: #selector(onDepthChanged), for: UIControl.Event.valueChanged)
+//        maskSwitch.addTarget(self, action: #selector(onMaskVisibilityChanged), for: UIControl.Event.valueChanged)
     }
     
     func setupMaterials() {
@@ -133,28 +127,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // MARK: Controlls behaviour
     
-    @objc func onRadiusChanged() {
-        let startScale = SCNVector3(1, 1, 1)
-        container.scale = SCNVector3(startScale.x + radiusSlider.value / 3,
-                                     startScale.y + radiusSlider.value / 3,
-                                     startScale.z + radiusSlider.value / 3)
-    }
+//    @objc func onRadiusChanged() {
+//        let startScale = SCNVector3(1, 1, 1)
+//        container.scale = SCNVector3(startScale.x + radiusSlider.value / 3,
+//                                     startScale.y + radiusSlider.value / 3,
+//                                     startScale.z + radiusSlider.value / 3)
+//    }
     
-    @objc func onDepthChanged() {
-        wheelNode.position = SCNVector3(0, 0, 0 + depthSlider.value / 10)
-    }
+//    @objc func onDepthChanged() {
+//        wheelNode.position = SCNVector3(0, 0, 0 + depthSlider.value / 10)
+//    }
     
-    @objc func onMaskVisibilityChanged() {
-        if maskSwitch.isOn {
-            UIView.animate(withDuration: 1, animations: {
-                self.maskNode!.geometry?.firstMaterial?.transparency = 1
-            })
-        } else {
-            UIView.animate(withDuration: 1, animations: {
-                self.maskNode!.geometry?.firstMaterial?.transparency = 0
-            })
-        }
-    }
+//    @objc func onMaskVisibilityChanged() {
+//        if maskSwitch.isOn {
+//            UIView.animate(withDuration: 1, animations: {
+//                self.maskNode!.geometry?.firstMaterial?.transparency = 1
+//            })
+//        } else {
+//            UIView.animate(withDuration: 1, animations: {
+//                self.maskNode!.geometry?.firstMaterial?.transparency = 0
+//            })
+//        }
+//    }
     
     // MARK: Plane behaviour
     
