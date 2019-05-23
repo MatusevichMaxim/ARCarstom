@@ -26,6 +26,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var navigationPanel = UIView()
     var settingsButtonView = UIView()
     var actionButtonView = UIView()
+    var dynamicPanel = DynamicPanel()
+    
+    var actionGesture : UITapGestureRecognizer?
+    var panelPosY : NSLayoutConstraint?
     
     let wheelDiameter : CGFloat = 0.3
     let portalDiameter : CGFloat = 0.126
@@ -39,6 +43,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var maskNode : SCNNode?
     
     var wheelAdded : Bool = false
+    var isPanelHidden : Bool = true
     
     
     // MARK: Base methods
@@ -53,8 +58,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         setupUi()
         setupMaterials()
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressed))
-        sceneView.addGestureRecognizer(longPressRecognizer)
+        actionGesture = UITapGestureRecognizer(target: self, action: #selector(onPanelAction))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,13 +66,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .vertical
-        
         sceneView.session.run(configuration)
+        
+        actionButtonView.addGestureRecognizer(actionGesture!)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         sceneView.session.pause()
+        
+        actionButtonView.removeGestureRecognizer(actionGesture!)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
@@ -120,10 +127,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func setupUi() {
         actionButtonView.backgroundColor = UIColor(red: 236, green: 69, blue: 38)
         actionButtonView.layer.cornerRadius = 33
+        actionButtonView.isUserInteractionEnabled = true
         view.addSubview(actionButtonView)
 
         let actionButtonImage = UIImageView(image: UIImage(named: "ic_add"))
+        actionButtonImage.isUserInteractionEnabled = false
         actionButtonView.addSubview(actionButtonImage)
+        
+        dynamicPanel.backgroundColor = .white
+        dynamicPanel.layer.cornerRadius = 33
+        dynamicPanel.isUserInteractionEnabled = false
+        dynamicPanel.alpha = 0
+        view.addSubview(dynamicPanel)
         
         actionButtonImage.autoCenterInSuperview()
         actionButtonImage.autoSetDimensions(to: CGSize(width: 24, height: 24))
@@ -131,6 +146,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         actionButtonView.autoPinEdge(ALEdge.bottom, to: ALEdge.top, of: panelView, withOffset: 38)
         actionButtonView.autoSetDimensions(to: CGSize(width: 66, height: 66))
         actionButtonView.autoAlignAxis(toSuperviewAxis: ALAxis.vertical)
+        
+        dynamicPanel.autoAlignAxis(toSuperviewAxis: ALAxis.vertical)
+        dynamicPanel.autoSetDimensions(to: CGSize(width: UIScreen.main.bounds.width / 1.5, height: 66))
+        panelPosY = dynamicPanel.autoPinEdge(ALEdge.bottom, to: ALEdge.top, of: actionButtonView, withOffset: -15)
     }
     
     func setupMaterials() {
@@ -174,6 +193,45 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         node.geometry = maskPlane
         
         return node
+    }
+    
+    // MARK: dynamic panel behaviour
+    
+    @objc func onPanelAction(recognizer: UITapGestureRecognizer) {
+        actionButtonView.isUserInteractionEnabled = false
+        
+        if isPanelHidden {
+            let targetPosY = panelPosY!.constant - 20
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                self.panelPosY!.constant = targetPosY - 5
+                self.view.layoutIfNeeded()
+                self.dynamicPanel.alpha = 0.8
+                self.actionButtonView.transform = CGAffineTransform(rotationAngle: -(225.0 * .pi) / 180.0)
+            }, completion: { finished in
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.panelPosY!.constant = targetPosY
+                    self.view.layoutIfNeeded()
+                    self.dynamicPanel.alpha = 1
+                }, completion: { finished in
+                    self.isPanelHidden = false
+                    self.actionButtonView.isUserInteractionEnabled = true
+                })
+            })
+        }
+        else {
+            let targetPosY = panelPosY!.constant + 20
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                self.panelPosY!.constant = targetPosY
+                self.view.layoutIfNeeded()
+                self.dynamicPanel.alpha = 0
+                self.actionButtonView.transform = CGAffineTransform(rotationAngle: 0)
+            }, completion: { finished in
+                self.isPanelHidden = true
+                self.actionButtonView.isUserInteractionEnabled = true
+            })
+        }
     }
     
     // MARK: Translate object
