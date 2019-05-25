@@ -70,6 +70,7 @@
                     </view>
                     <connections>
                         <outlet property="autoButton" destination="Cba-3k-kaB" id="xrz-ki-l11"/>
+                        <outlet property="bottomPanelConstraint" destination="JUZ-rd-Bag" id="cAP-6E-zm5"/>
                         <outlet property="panelView" destination="vvu-xU-fQM" id="V8r-Pf-qge"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                         <outlet property="staticButton" destination="6cy-Wk-vDr" id="dsT-Zl-CG6"/>
@@ -83,6 +84,6 @@
     <resources>
         <image name="ic_frame" width="48.5" height="41"/>
         <image name="ic_wrench" width="41.5" height="41.5"/>
-        <image name="panel" width="564" height="133.5"/>
+        <image name="panel" width="558" height="133.5"/>
     </resources>
 </document>
