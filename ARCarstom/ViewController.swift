@@ -22,6 +22,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var panelView: UIView!
     @IBOutlet var staticButton: UIImageView!
     @IBOutlet var autoButton: UIImageView!
+    @IBOutlet var shotButton: UIImageView!
+    @IBOutlet var shopButton: UIImageView!
     @IBOutlet var bottomPanelConstraint: NSLayoutConstraint!
     
     var navigationPanel = UIView()
@@ -29,7 +31,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var actionButtonView = UIView()
     var cameraMaskView = UIView()
     var dynamicPanel = DynamicPanel()
+    var settingsPanel = SettingsPanel()
     
+    var shotGesture : UITapGestureRecognizer?
     var actionGesture : UITapGestureRecognizer?
     var cameraMaskGesture : UITapGestureRecognizer?
     
@@ -67,6 +71,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         setupUi()
         setupMaterials()
         
+        shotGesture = UITapGestureRecognizer(target: self, action: #selector(onShotAction))
         actionGesture = UITapGestureRecognizer(target: self, action: #selector(onPanelAction))
         cameraMaskGesture = UITapGestureRecognizer(target: self, action: #selector(onCameraMaskPressed))
     }
@@ -78,6 +83,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         configuration.planeDetection = .vertical
         sceneView.session.run(configuration)
         
+        shotButton.addGestureRecognizer(shotGesture!)
         actionButtonView.addGestureRecognizer(actionGesture!)
         cameraMaskView.addGestureRecognizer(cameraMaskGesture!)
         dynamicPanel.addTargets()
@@ -87,6 +93,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.viewWillDisappear(animated)
         sceneView.session.pause()
         
+        shotButton.removeGestureRecognizer(shotGesture!)
         actionButtonView.removeGestureRecognizer(actionGesture!)
         cameraMaskView.removeGestureRecognizer(cameraMaskGesture!)
         dynamicPanel.removeTargets()
@@ -139,6 +146,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: Setup
     
     func setupUi() {
+        view.addSubview(settingsPanel)
+        settingsPanel.autoPinEdge(.bottom, to: .top, of: panelView, withOffset: -15)
+        settingsPanel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
+        
+        
         actionButtonView.backgroundColor = UIColor(red: 236, green: 69, blue: 38)
         actionButtonView.layer.cornerRadius = 33
         actionButtonView.isUserInteractionEnabled = true
@@ -165,8 +177,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         actionButtonImage.autoCenterInSuperview()
         actionButtonImage.autoSetDimensions(to: CGSize(width: 24, height: 24))
         
-        actionButtonView.autoPinEdge(ALEdge.bottom, to: ALEdge.top, of: panelView, withOffset: 37)
-        actionButtonView.autoSetDimensions(to: CGSize(width: 65, height: 65))
+        actionButtonView.autoPinEdge(ALEdge.bottom, to: ALEdge.top, of: panelView, withOffset: 39)
+        actionButtonView.autoSetDimensions(to: CGSize(width: 64, height: 64))
         actionButtonView.autoAlignAxis(toSuperviewAxis: ALAxis.vertical)
         
         cameraMaskView.autoCenterInSuperview()
@@ -342,40 +354,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // MARK: controls
     
-    func cameraAction() {
+    @objc func onShotAction(recognizer: UITapGestureRecognizer) {
+        guard !isCameraMode else { return }
         isCameraMode = true
-        hidePanel()
-        cameraMaskView.isUserInteractionEnabled = true
         
-        UIView.animate(withDuration: 0.3, animations: {
-            self.cameraMaskSize?.first?.constant = 53
-            self.cameraMaskSize?.last?.constant = 53
-            self.view.layoutIfNeeded()
-        }, completion: { finished in
-            UIView.animate(withDuration: 0.1, animations: {
-                self.cameraMaskSize?.first?.constant = 50
-                self.cameraMaskSize?.last?.constant = 50
-                self.view.layoutIfNeeded()
-            }, completion: { finished in
-                self.cameraMaskView.isUserInteractionEnabled = true
-            })
-        })
+        cameraActivateAnimation()
     }
     
-    @objc func onCameraMaskPressed(recognizer: UILongPressGestureRecognizer) {
+    @objc func onCameraMaskPressed(recognizer: UITapGestureRecognizer) {
         cameraMaskView.isUserInteractionEnabled = false
-        
-        showPanel()
         self.actionButtonView.isUserInteractionEnabled = false
         
-        UIView.animate(withDuration: 0.3, animations: {
-            self.cameraMaskSize?.first?.constant = 0
-            self.cameraMaskSize?.last?.constant = 0
-            self.view.layoutIfNeeded()
-        }, completion: { finished in
-            self.actionButtonView.isUserInteractionEnabled = true
-            self.isCameraMode = false
-        })
+        cameraCloseAnimation()
     }
     
     func pipetteAction() {
@@ -454,5 +444,36 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         case .down:
             container.position = SCNVector3(container.position.x, container.position.y - 0.01, container.position.z)
         }
+    }
+    
+    // MARK: animations
+    
+    func cameraActivateAnimation() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.cameraMaskSize?.first?.constant = 53
+            self.cameraMaskSize?.last?.constant = 53
+            self.shotButton.alpha = 0.05
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.cameraMaskSize?.first?.constant = 50
+                self.cameraMaskSize?.last?.constant = 50
+                self.view.layoutIfNeeded()
+            }, completion: { finished in
+                self.cameraMaskView.isUserInteractionEnabled = true
+            })
+        })
+    }
+    
+    func cameraCloseAnimation() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.cameraMaskSize?.first?.constant = 0
+            self.cameraMaskSize?.last?.constant = 0
+            self.shotButton.alpha = 1
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            self.actionButtonView.isUserInteractionEnabled = true
+            self.isCameraMode = false
+        })
     }
 }

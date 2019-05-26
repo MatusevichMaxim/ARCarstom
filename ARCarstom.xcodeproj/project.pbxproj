@@ -15,6 +15,7 @@
 		8B9A088E2286EB160002BEE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A088D2286EB160002BEE5 /* Assets.xcassets */; };
 		8B9A08912286EB160002BEE5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A088F2286EB160002BEE5 /* LaunchScreen.storyboard */; };
 		8B9FF27722877AF900F4C969 /* scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9FF27622877AF900F4C969 /* scnassets */; };
+		8BA0CD61229AE68E008B12E4 /* SettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA0CD60229AE68E008B12E4 /* SettingsPanel.swift */; };
 		8BB52F5F22966B6800951680 /* DynamicPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB52F5E22966B6800951680 /* DynamicPanel.swift */; };
 		8BCBE6632299FCAB002F6EB0 /* Directions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBE6622299FCAB002F6EB0 /* Directions.swift */; };
 		8BCBE665229A0343002F6EB0 /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBE664229A0343002F6EB0 /* DeviceHelper.swift */; };
@@ -33,6 +34,7 @@
 		8B9A08902286EB160002BEE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B9A08922286EB160002BEE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B9FF27622877AF900F4C969 /* scnassets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scnassets; sourceTree = "<group>"; };
+		8BA0CD60229AE68E008B12E4 /* SettingsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPanel.swift; sourceTree = "<group>"; };
 		8BB52F5E22966B6800951680 /* DynamicPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicPanel.swift; sourceTree = "<group>"; };
 		8BCBE6622299FCAB002F6EB0 /* Directions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Directions.swift; sourceTree = "<group>"; };
 		8BCBE664229A0343002F6EB0 /* DeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				8BB52F5E22966B6800951680 /* DynamicPanel.swift */,
+				8BA0CD60229AE68E008B12E4 /* SettingsPanel.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B97AA62228C284200C6E270 /* ColorExtension.swift in Sources */,
+				8BA0CD61229AE68E008B12E4 /* SettingsPanel.swift in Sources */,
 				8BCBE665229A0343002F6EB0 /* DeviceHelper.swift in Sources */,
 				8B9A08892286EB160002BEE5 /* ViewController.swift in Sources */,
 				8BB52F5F22966B6800951680 /* DynamicPanel.swift in Sources */,
@@ -404,13 +408,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9845B57J4C;
+				DEVELOPMENT_TEAM = ED8LYZC3M4;
 				INFOPLIST_FILE = ARCarstom/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.maximm.testing;
+				PRODUCT_BUNDLE_IDENTIFIER = com.carstom.carstom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -425,13 +429,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9845B57J4C;
+				DEVELOPMENT_TEAM = ED8LYZC3M4;
 				INFOPLIST_FILE = ARCarstom/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.maximm.testing;
+				PRODUCT_BUNDLE_IDENTIFIER = com.carstom.carstom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

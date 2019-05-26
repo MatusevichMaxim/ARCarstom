@@ -116,6 +116,6 @@ public extension UIDevice {
                modelName == HardwareVersion.iPhoneXS.rawValue ||
                modelName == HardwareVersion.iPhoneXSMax.rawValue ||
                modelName == HardwareVersion.iPhoneXR.rawValue
-//        || modelName == HardwareVersion.iPhoneSimulator.rawValue // for tests
+        || modelName == HardwareVersion.iPhoneSimulator.rawValue // for tests
     }
 }

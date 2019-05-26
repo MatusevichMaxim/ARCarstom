@@ -21,7 +21,6 @@ class DynamicPanel: UIView {
     var upButton = UIImageView(image: UIImage(named: "ic_up"))
     var downButton = UIImageView(image: UIImage(named: "ic_down"))
     
-    var cameraGesture : UITapGestureRecognizer?
     var pipetteGesture : UITapGestureRecognizer?
     var resizeGesture : UITapGestureRecognizer?
     var translateGesture : UITapGestureRecognizer?
@@ -44,7 +43,6 @@ class DynamicPanel: UIView {
     }
     
     private func commonInit() {
-        cameraGesture = UITapGestureRecognizer(target: self, action: #selector(onCameraAction))
         pipetteGesture = UITapGestureRecognizer(target: self, action: #selector(onPipetteAction))
         resizeGesture = UITapGestureRecognizer(target: self, action: #selector(onResizeAction))
         translateGesture = UITapGestureRecognizer(target: self, action: #selector(onTranslateAction))
@@ -145,7 +143,6 @@ class DynamicPanel: UIView {
     }
     
     func addTargets() {
-        cameraButton.addGestureRecognizer(cameraGesture!)
         pipetteButton.addGestureRecognizer(pipetteGesture!)
         resizeButton.addGestureRecognizer(resizeGesture!)
         translateButton.addGestureRecognizer(translateGesture!)
@@ -158,7 +155,6 @@ class DynamicPanel: UIView {
     }
     
     func removeTargets() {
-        cameraButton.removeGestureRecognizer(cameraGesture!)
         pipetteButton.removeGestureRecognizer(pipetteGesture!)
         resizeButton.removeGestureRecognizer(resizeGesture!)
         translateButton.removeGestureRecognizer(translateGesture!)
@@ -171,10 +167,6 @@ class DynamicPanel: UIView {
     }
     
     // MARK: buttons gestures
-    
-    @objc func onCameraAction(recognizer: UITapGestureRecognizer) {
-        viewController?.cameraAction()
-    }
     
     @objc func onPipetteAction(recognizer: UITapGestureRecognizer) {
         viewController?.pipetteAction()
