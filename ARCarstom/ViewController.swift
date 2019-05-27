@@ -12,10 +12,6 @@ import ARKit
 import PortalMask
 import PureLayout
 
-enum CategoryBitMask: Int {
-    case categoryToSelect = 2
-}
-
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
@@ -41,11 +37,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var brushBtnX: NSLayoutConstraint?
     var movePanelX: NSLayoutConstraint?
     var resizePanelX: NSLayoutConstraint?
+    var palettePanelX: NSLayoutConstraint?
     
     var navigationPanel = UIView()
     var settingsButtonView = UIView()
     var actionButtonView = UIView()
     var cameraMaskView = UIView()
+    var palettePanel = UIView()
     
     var shotGesture : UITapGestureRecognizer?
     var actionGesture : UITapGestureRecognizer?
@@ -65,11 +63,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var cameraMaskSize : [NSLayoutConstraint]?
     
     let wheelDiameter : CGFloat = 0.01
-    let portalDiameter : CGFloat = 0.246
+    let portalDiameter : CGFloat = 0.245
     
     var planeNode = SCNNode()
     var container = SCNNode()
     var wheelNode = SCNNode()
+    var brakeNode = SCNNode()
     var wheelMaterial = SCNMaterial()
     
     var selectedNode : SCNNode?
@@ -80,6 +79,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var isCameraMode : Bool = false
     var isResizeMode : Bool = false
     var isTranslateMode : Bool = false
+    var isPaletteMode : Bool = false
     
     
     // MARK: Base methods
@@ -149,30 +149,69 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let portal = PortalMask(radius: portalDiameter)
                 container.addChildNode(portal)
                 
-                let wheelScene = SCNScene(named: "scnassets/rim2.scn")!
-                if let childNode = wheelScene.rootNode.childNode(withName: "rim2", recursively: true) {
+                let rimScene = SCNScene(named: "scnassets/rim.scn")!
+                if let rimChildNode = rimScene.rootNode.childNode(withName: "rim", recursively: true) {
                     wheelNode = SCNNode()
-                    wheelNode = childNode
-                    wheelNode.position = SCNVector3(0, 0, 0)
+                    wheelNode = rimChildNode
+                    wheelNode.position = SCNVector3(0, 0, -0.22)
                     wheelNode.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
                     wheelNode.eulerAngles.y = -.pi / 2
                     wheelNode.geometry?.materials = [wheelMaterial]
-                    wheelNode.categoryBitMask = CategoryBitMask.categoryToSelect.rawValue
                     wheelAdded = true
                     hidePlane()
-
+                    
                     maskNode = createMask()
                     wheelNode.addChildNode(maskNode!)
-                    maskNode!.position = SCNVector3(-wheelNode.scale.z * 5, 0, 0)
+                    maskNode!.position = SCNVector3(-50, 0, 0)
                     maskNode!.eulerAngles.y = .pi / 2
-                    maskNode!.geometry?.firstMaterial?.transparency = 0
-
+                    
                     container.addChildNode(wheelNode)
                 }
-            
+                
+                let brakeScene = SCNScene(named: "scnassets/brake.scn")!
+                if let brakeChildNode = brakeScene.rootNode.childNode(withName: "brake", recursively: true) {
+                    brakeNode = SCNNode()
+                    brakeNode = brakeChildNode
+                    brakeNode.position = SCNVector3(0, 0, -0.22)
+                    brakeNode.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
+                    brakeNode.eulerAngles.y = -.pi / 2
+
+                    let geom = brakeNode.childNode(withName: "Geom", recursively: true)
+
+                    let disk = geom?.childNode(withName: "Disk", recursively: true)
+                    disk?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "scnassets/brakeDisk.png")
+                    let caliper = geom?.childNode(withName: "Caliper_Brembo_8P", recursively: true)
+                    caliper?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "scnassets/caliper.png")
+                    let massNuts = geom?.childNode(withName: "Wheel_mass_nuts", recursively: true)
+                    massNuts?.geometry?.firstMaterial = createMaterial(light: false)
+                    let brakeRotor = geom?.childNode(withName: "Brake_rotor", recursively: true)
+                    brakeRotor?.geometry?.firstMaterial = createMaterial(light: false)
+                    let bolts = geom?.childNode(withName: "Object020", recursively: true)
+                    bolts?.geometry?.firstMaterial = createMaterial(light: false)
+                    let boltsExternal = geom?.childNode(withName: "Ferrari_F12_tdf_nut_F_002", recursively: true)
+                    boltsExternal?.geometry?.firstMaterial = createMaterial(light: true)
+
+                    setupRimMaterials(withColor: .white)
+                    container.addChildNode(brakeNode)
+                }
+
                 planeNode.addChildNode(container)
             }
         }
+    }
+    
+    func setupRimMaterials(withColor color: UIColor) {
+        
+    }
+    
+    func createMaterial(light isLight: Bool) -> SCNMaterial {
+        let material = SCNMaterial()
+        material.lightingModel = .physicallyBased
+        material.metalness.contents = 1.0
+        material.roughness.contents = 0
+        material.diffuse.contents = isLight ? UIColor.white : UIColor.darkGray
+        
+        return material
     }
     
     // MARK: Setup
@@ -227,6 +266,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         setupMovePanel()
         setupResizePanel()
+        setupPalette()
         
         brushButton.autoSetDimensions(to: CGSize(width: 40, height: 40))
         brushBtnX = brushButton.autoPinEdge(.left, to: .right, of: view)
@@ -251,6 +291,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         resizePanelX = resizePanel.autoPinEdge(.left, to: .right, of: view)
         resizePanel.autoPinEdge(.top, to: .top, of: movePanel)
         resizePanel.autoPinEdge(.bottom, to: .bottom, of: movePanel)
+        
+        palettePanel.autoSetDimension(.width, toSize: 40)
+        palettePanelX = palettePanel.autoPinEdge(.left, to: .right, of: view)
+        palettePanel.autoPinEdge(.bottom, to: .top, of: brushButton, withOffset: -15)
     }
     
     func setupMovePanel() {
@@ -331,6 +375,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func setupResizePanel() {
+        increaseGesture = UITapGestureRecognizer(target: self, action: #selector(increaseAction))
+        reduceGesture = UITapGestureRecognizer(target: self, action: #selector(reduceAction))
+        
         resizePanel.backgroundColor = .white
         resizePanel.layer.cornerRadius = 20
         resizePanel.isUserInteractionEnabled = true
@@ -341,8 +388,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         plusImg.contentMode = .scaleAspectFit
         
         let plusZone = UIView()
+        plusZone.isUserInteractionEnabled = true
         resizePanel.addSubview(plusZone)
         plusZone.addSubview(plusImg)
+        plusZone.addGestureRecognizer(increaseGesture!)
         
         plusImg.autoSetDimensions(to: CGSize(width: 15, height: 15))
         plusImg.autoCenterInSuperview()
@@ -354,14 +403,68 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         minusImg.contentMode = .scaleAspectFit
         
         let minusZone = UIView()
+        minusZone.isUserInteractionEnabled = true
         resizePanel.addSubview(minusZone)
         minusZone.addSubview(minusImg)
+        minusZone.addGestureRecognizer(reduceGesture!)
         
         minusImg.autoSetDimensions(to: CGSize(width: 15, height: 15))
         minusImg.autoCenterInSuperview()
         minusZone.autoPinEdge(toSuperviewEdge: .bottom)
         minusZone.autoAlignAxis(toSuperviewAxis: .vertical)
         minusZone.autoSetDimensions(to: CGSize(width: 40, height: 95 / 2))
+    }
+    
+    func setupPalette() {
+        let silverGesture = ColorGestureRecognizer(target: self, action: #selector(colorAction))
+        let darkGesture = ColorGestureRecognizer(target: self, action: #selector(colorAction))
+        let goldGesture = ColorGestureRecognizer(target: self, action: #selector(colorAction))
+        
+        palettePanel.backgroundColor = .white
+        palettePanel.layer.cornerRadius = 20
+        palettePanel.isUserInteractionEnabled = true
+        palettePanel.clipsToBounds = true
+        view.addSubview(palettePanel)
+        
+        let silverColor = UIView()
+        silverColor.layer.cornerRadius = 12
+        silverColor.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        silverColor.layer.borderWidth = 2
+        silverColor.backgroundColor = .lightGray
+        palettePanel.addSubview(silverColor)
+        silverColor.addGestureRecognizer(silverGesture)
+        silverGesture.rimColor = .silver
+        
+        silverColor.autoAlignAxis(toSuperviewAxis: .vertical)
+        silverColor.autoSetDimensions(to: CGSize(width: 24, height: 24))
+        silverColor.autoPinEdge(toSuperviewEdge: .top, withInset: 15)
+        
+        let darkColor = UIView()
+        darkColor.layer.cornerRadius = 12
+        darkColor.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        darkColor.layer.borderWidth = 2
+        darkColor.backgroundColor = .darkGray
+        palettePanel.addSubview(darkColor)
+        darkColor.addGestureRecognizer(darkGesture)
+        darkGesture.rimColor = .dark
+        
+        darkColor.autoAlignAxis(toSuperviewAxis: .vertical)
+        darkColor.autoSetDimensions(to: CGSize(width: 24, height: 24))
+        darkColor.autoPinEdge(.top, to: .bottom, of: silverColor, withOffset: 10)
+        
+        let goldColor = UIView()
+        goldColor.layer.cornerRadius = 12
+        goldColor.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        goldColor.layer.borderWidth = 2
+        goldColor.backgroundColor = .yellow
+        palettePanel.addSubview(goldColor)
+        goldColor.addGestureRecognizer(goldGesture)
+        goldGesture.rimColor = .gold
+        
+        goldColor.autoAlignAxis(toSuperviewAxis: .vertical)
+        goldColor.autoSetDimensions(to: CGSize(width: 24, height: 24))
+        goldColor.autoPinEdge(.top, to: .bottom, of: darkColor, withOffset: 10)
+        goldColor.autoPinEdge(toSuperviewEdge: .bottom, withInset: 15)
     }
     
     func setupMaterials() {
@@ -396,7 +499,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func createMask() -> SCNNode {
-        let maskPlane = SCNPlane(width: CGFloat(wheelNode.scale.x * 10), height: CGFloat(wheelNode.scale.y * 10))
+        let maskPlane = SCNPlane(width: CGFloat(100), height: CGFloat(100))
         let maskMaterial = SCNMaterial()
         maskMaterial.diffuse.contents = UIImage(named: "scnassets/mask.png")
         maskPlane.materials = [maskMaterial]
@@ -440,7 +543,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         cameraCloseAnimation()
     }
     
-    func increaseAction() {
+    @objc func increaseAction(recognizer: UITapGestureRecognizer) {
         guard wheelAdded else { return }
         
         container.scale.x += 0.01
@@ -448,7 +551,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         container.scale.z += 0.01
     }
     
-    func reduceAction() {
+    @objc func reduceAction(recognizer: UITapGestureRecognizer) {
         guard wheelAdded else { return }
         
         container.scale.x -= 0.01
@@ -461,13 +564,24 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         switch recognizer.direction! {
         case .left:
-            container.position = SCNVector3(container.position.x - 0.01, container.position.y, container.position.z)
+            container.position = SCNVector3(container.position.x - 0.005, container.position.y, container.position.z)
         case .right:
-            container.position = SCNVector3(container.position.x + 0.01, container.position.y, container.position.z)
+            container.position = SCNVector3(container.position.x + 0.005, container.position.y, container.position.z)
         case .up:
-            container.position = SCNVector3(container.position.x, container.position.y + 0.01, container.position.z)
+            container.position = SCNVector3(container.position.x, container.position.y + 0.005, container.position.z)
         case .down:
-            container.position = SCNVector3(container.position.x, container.position.y - 0.01, container.position.z)
+            container.position = SCNVector3(container.position.x, container.position.y - 0.005, container.position.z)
+        }
+    }
+    
+    @objc func colorAction(recognizer: ColorGestureRecognizer) {
+        switch recognizer.rimColor! {
+        case .silver:
+            wheelMaterial.diffuse.contents = UIColor.white
+        case .dark:
+            wheelMaterial.diffuse.contents = UIColor.darkGray
+        case .gold:
+            wheelMaterial.diffuse.contents = UIColor(red: 174/255, green: 193/255, blue: 0/255, alpha: 1.0)//UIColor.yellow
         }
     }
     
@@ -584,6 +698,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if isResizeMode {
             hideResizePanel()
         }
+        
+        if isPaletteMode {
+            hidePalettePanel()
+        }
     }
     
     func showMovePanel() {
@@ -630,6 +748,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         })
     }
     
+    func showPalettePanel() {
+        isPaletteMode = true
+        UIView.animate(withDuration: 0.2, animations: {
+            self.palettePanelX?.constant = -70
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.palettePanelX?.constant = -60
+                self.view.layoutIfNeeded()
+            })
+        })
+    }
+    
+    func hidePalettePanel() {
+        isPaletteMode = false
+        UIView.animate(withDuration: 0.2, animations: {
+            self.palettePanelX?.constant = 0
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+        })
+    }
+    
     // MARK: buttons behaviours
     
     @objc func onMoveBtnAction(recognizer: UITapGestureRecognizer) {
@@ -638,6 +778,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         } else {
             if isResizeMode {
                 hideResizePanel()
+            }
+            
+            if isPaletteMode {
+                hidePalettePanel()
             }
             
             showMovePanel()
@@ -652,11 +796,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 hideMovePanel()
             }
             
+            if isPaletteMode {
+                hidePalettePanel()
+            }
+            
             showResizePanel()
         }
     }
     
     @objc func onBrushBtnAction(recognizer: UITapGestureRecognizer) {
-        
+        if isPaletteMode {
+            hidePalettePanel()
+        } else {
+            if isTranslateMode {
+                hideMovePanel()
+            }
+            
+            if isResizeMode {
+                hideResizePanel()
+            }
+            
+            showPalettePanel()
+        }
     }
 }
