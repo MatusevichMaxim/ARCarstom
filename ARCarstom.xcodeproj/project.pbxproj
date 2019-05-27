@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		855EBC566F608DA2A35BE96C /* Pods_ARCarstom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */; };
+		8B8C5CB8229C7BF6008BC0F2 /* CustomGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C5CB7229C7BF6008BC0F2 /* CustomGestureRecognizer.swift */; };
 		8B97AA62228C284200C6E270 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B97AA61228C284200C6E270 /* ColorExtension.swift */; };
 		8B9A08852286EB160002BEE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A08842286EB160002BEE5 /* AppDelegate.swift */; };
 		8B9A08892286EB160002BEE5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A08882286EB160002BEE5 /* ViewController.swift */; };
@@ -15,8 +16,6 @@
 		8B9A088E2286EB160002BEE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A088D2286EB160002BEE5 /* Assets.xcassets */; };
 		8B9A08912286EB160002BEE5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A088F2286EB160002BEE5 /* LaunchScreen.storyboard */; };
 		8B9FF27722877AF900F4C969 /* scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9FF27622877AF900F4C969 /* scnassets */; };
-		8BA0CD61229AE68E008B12E4 /* SettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA0CD60229AE68E008B12E4 /* SettingsPanel.swift */; };
-		8BB52F5F22966B6800951680 /* DynamicPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB52F5E22966B6800951680 /* DynamicPanel.swift */; };
 		8BCBE6632299FCAB002F6EB0 /* Directions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBE6622299FCAB002F6EB0 /* Directions.swift */; };
 		8BCBE665229A0343002F6EB0 /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBE664229A0343002F6EB0 /* DeviceHelper.swift */; };
 /* End PBXBuildFile section */
@@ -25,6 +24,7 @@
 		2DF95171F16519515772A046 /* Pods-ARCarstom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARCarstom.release.xcconfig"; path = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.release.xcconfig"; sourceTree = "<group>"; };
 		64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARCarstom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		87B6D79152EB5E75343C8677 /* Pods-ARCarstom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARCarstom.debug.xcconfig"; path = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.debug.xcconfig"; sourceTree = "<group>"; };
+		8B8C5CB7229C7BF6008BC0F2 /* CustomGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGestureRecognizer.swift; sourceTree = "<group>"; };
 		8B97AA61228C284200C6E270 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		8B9A08812286EB160002BEE5 /* ARCarstom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARCarstom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9A08842286EB160002BEE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -34,8 +34,6 @@
 		8B9A08902286EB160002BEE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B9A08922286EB160002BEE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B9FF27622877AF900F4C969 /* scnassets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scnassets; sourceTree = "<group>"; };
-		8BA0CD60229AE68E008B12E4 /* SettingsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPanel.swift; sourceTree = "<group>"; };
-		8BB52F5E22966B6800951680 /* DynamicPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicPanel.swift; sourceTree = "<group>"; };
 		8BCBE6622299FCAB002F6EB0 /* Directions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Directions.swift; sourceTree = "<group>"; };
 		8BCBE664229A0343002F6EB0 /* DeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,6 +80,7 @@
 			children = (
 				8B97AA61228C284200C6E270 /* ColorExtension.swift */,
 				8BCBE664229A0343002F6EB0 /* DeviceHelper.swift */,
+				8B8C5CB7229C7BF6008BC0F2 /* CustomGestureRecognizer.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -124,8 +123,6 @@
 		8BB52F5B22966B1000951680 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				8BB52F5E22966B6800951680 /* DynamicPanel.swift */,
-				8BA0CD60229AE68E008B12E4 /* SettingsPanel.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -254,10 +251,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B97AA62228C284200C6E270 /* ColorExtension.swift in Sources */,
-				8BA0CD61229AE68E008B12E4 /* SettingsPanel.swift in Sources */,
 				8BCBE665229A0343002F6EB0 /* DeviceHelper.swift in Sources */,
+				8B8C5CB8229C7BF6008BC0F2 /* CustomGestureRecognizer.swift in Sources */,
 				8B9A08892286EB160002BEE5 /* ViewController.swift in Sources */,
-				8BB52F5F22966B6800951680 /* DynamicPanel.swift in Sources */,
 				8B9A08852286EB160002BEE5 /* AppDelegate.swift in Sources */,
 				8BCBE6632299FCAB002F6EB0 /* Directions.swift in Sources */,
 			);

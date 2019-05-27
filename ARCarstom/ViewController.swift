@@ -26,23 +26,46 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var shopButton: UIImageView!
     @IBOutlet var bottomPanelConstraint: NSLayoutConstraint!
     
+    var moveButton = UIView()
+    var moveImage = UIImageView(image: UIImage(named: "ic_translate"))
+    var scaleButton = UIView()
+    var scaleImage = UIImageView(image: UIImage(named: "ic_increaseSize"))
+    var brushButton = UIView()
+    var brushImage = UIImageView(image: UIImage(named: "ic_pipette"))
+    
+    var movePanel = UIView()
+    var resizePanel = UIView()
+    
+    var moveBtnX: NSLayoutConstraint?
+    var scaleBtnX: NSLayoutConstraint?
+    var brushBtnX: NSLayoutConstraint?
+    var movePanelX: NSLayoutConstraint?
+    var resizePanelX: NSLayoutConstraint?
+    
     var navigationPanel = UIView()
     var settingsButtonView = UIView()
     var actionButtonView = UIView()
     var cameraMaskView = UIView()
-    var dynamicPanel = DynamicPanel()
-    var settingsPanel = SettingsPanel()
     
     var shotGesture : UITapGestureRecognizer?
     var actionGesture : UITapGestureRecognizer?
     var cameraMaskGesture : UITapGestureRecognizer?
+    var moveGesture: UITapGestureRecognizer?
+    var scaleGesture: UITapGestureRecognizer?
+    var brushGesture: UITapGestureRecognizer?
     
-    var panelPosY : NSLayoutConstraint?
+    var leftGesture: CustomGestureRecognizer?
+    var rightGesture: CustomGestureRecognizer?
+    var upGesture: CustomGestureRecognizer?
+    var downGesture: CustomGestureRecognizer?
+    var increaseGesture: UITapGestureRecognizer?
+    var reduceGesture: UITapGestureRecognizer?
+    
     var dynamicPanelSize :[NSLayoutConstraint]?
     var cameraMaskSize : [NSLayoutConstraint]?
     
-    let wheelDiameter : CGFloat = 0.3
-    let portalDiameter : CGFloat = 0.126
+    let wheelDiameter : CGFloat = 0.01
+    let portalDiameter : CGFloat = 0.246
     
     var planeNode = SCNNode()
     var container = SCNNode()
@@ -69,11 +92,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.autoenablesDefaultLighting = true
         
         setupUi()
+        setupSettingsPanel()
         setupMaterials()
         
         shotGesture = UITapGestureRecognizer(target: self, action: #selector(onShotAction))
-        actionGesture = UITapGestureRecognizer(target: self, action: #selector(onPanelAction))
+        actionGesture = UITapGestureRecognizer(target: self, action: #selector(onActionBtnClicked))
         cameraMaskGesture = UITapGestureRecognizer(target: self, action: #selector(onCameraMaskPressed))
+        
+        moveGesture = UITapGestureRecognizer(target: self, action: #selector(onMoveBtnAction))
+        scaleGesture = UITapGestureRecognizer(target: self, action: #selector(onScaleBtnAction))
+        brushGesture = UITapGestureRecognizer(target: self, action: #selector(onBrushBtnAction))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,7 +114,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         shotButton.addGestureRecognizer(shotGesture!)
         actionButtonView.addGestureRecognizer(actionGesture!)
         cameraMaskView.addGestureRecognizer(cameraMaskGesture!)
-        dynamicPanel.addTargets()
+        moveButton.addGestureRecognizer(moveGesture!)
+        scaleButton.addGestureRecognizer(scaleGesture!)
+        brushButton.addGestureRecognizer(brushGesture!)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -96,7 +126,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         shotButton.removeGestureRecognizer(shotGesture!)
         actionButtonView.removeGestureRecognizer(actionGesture!)
         cameraMaskView.removeGestureRecognizer(cameraMaskGesture!)
-        dynamicPanel.removeTargets()
+        moveButton.removeGestureRecognizer(moveGesture!)
+        scaleButton.removeGestureRecognizer(scaleGesture!)
+        brushButton.removeGestureRecognizer(brushGesture!)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
@@ -117,8 +149,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let portal = PortalMask(radius: portalDiameter)
                 container.addChildNode(portal)
                 
-                let wheelScene = SCNScene(named: "scnassets/rim.scn")!
-                if let childNode = wheelScene.rootNode.childNode(withName: "rim", recursively: true) {
+                let wheelScene = SCNScene(named: "scnassets/rim2.scn")!
+                if let childNode = wheelScene.rootNode.childNode(withName: "rim2", recursively: true) {
                     wheelNode = SCNNode()
                     wheelNode = childNode
                     wheelNode.position = SCNVector3(0, 0, 0)
@@ -146,11 +178,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: Setup
     
     func setupUi() {
-        view.addSubview(settingsPanel)
-        settingsPanel.autoPinEdge(.bottom, to: .top, of: panelView, withOffset: -15)
-        settingsPanel.autoPinEdge(toSuperviewEdge: .right, withInset: 20)
-        
-        
         actionButtonView.backgroundColor = UIColor(red: 236, green: 69, blue: 38)
         actionButtonView.layer.cornerRadius = 33
         actionButtonView.isUserInteractionEnabled = true
@@ -166,14 +193,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         cameraMaskView.layer.cornerRadius = 25
         actionButtonView.addSubview(cameraMaskView)
 
-        dynamicPanel.backgroundColor = .white
-        dynamicPanel.layer.cornerRadius = 33
-        dynamicPanel.isUserInteractionEnabled = false
-        dynamicPanel.alpha = 0
-        dynamicPanel.viewController = self
-        dynamicPanel.translatesAutoresizingMaskIntoConstraints = true
-        view.addSubview(dynamicPanel)
-        
         actionButtonImage.autoCenterInSuperview()
         actionButtonImage.autoSetDimensions(to: CGSize(width: 24, height: 24))
         
@@ -184,11 +203,165 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         cameraMaskView.autoCenterInSuperview()
         cameraMaskSize = cameraMaskView.autoSetDimensions(to: CGSize(width: 0, height: 0))
         
-        dynamicPanel.autoAlignAxis(toSuperviewAxis: ALAxis.vertical)
-        dynamicPanelSize = dynamicPanel.autoSetDimensions(to: CGSize(width: UIScreen.main.bounds.width / 1.5, height: 66))
-        panelPosY = dynamicPanel.autoPinEdge(ALEdge.bottom, to: ALEdge.top, of: actionButtonView, withOffset: -15)
-        
         bottomPanelConstraint.constant = UIDevice.isXDevice() ? 0 : -20
+    }
+    
+    func setupSettingsPanel() {
+        brushButton.backgroundColor = .white
+        brushButton.layer.cornerRadius = 20
+        brushButton.isUserInteractionEnabled = true
+        view.addSubview(brushButton)
+        brushButton.addSubview(brushImage)
+        
+        scaleButton.backgroundColor = .white
+        scaleButton.layer.cornerRadius = 20
+        scaleButton.isUserInteractionEnabled = true
+        view.addSubview(scaleButton)
+        scaleButton.addSubview(scaleImage)
+        
+        moveButton.backgroundColor = .white
+        moveButton.layer.cornerRadius = 20
+        moveButton.isUserInteractionEnabled = true
+        view.addSubview(moveButton)
+        moveButton.addSubview(moveImage)
+        
+        setupMovePanel()
+        setupResizePanel()
+        
+        brushButton.autoSetDimensions(to: CGSize(width: 40, height: 40))
+        brushBtnX = brushButton.autoPinEdge(.left, to: .right, of: view)
+        brushButton.autoPinEdge(.bottom, to: .top, of: scaleButton, withOffset: -15)
+        brushImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        
+        scaleButton.autoSetDimensions(to: CGSize(width: 40, height: 40))
+        scaleBtnX = scaleButton.autoPinEdge(.left, to: .right, of: view)
+        scaleButton.autoPinEdge(.bottom, to: .top, of: moveButton, withOffset: -15)
+        scaleImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12))
+        
+        moveButton.autoSetDimensions(to: CGSize(width: 40, height: 40))
+        moveBtnX = moveButton.autoPinEdge(.left, to: .right, of: view)
+        moveButton.autoPinEdge(.bottom, to: .top, of: movePanel, withOffset: -15)
+        moveImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        
+        movePanel.autoSetDimensions(to: CGSize(width: 95, height: 95))
+        movePanelX = movePanel.autoPinEdge(.left, to: .right, of: view)
+        movePanel.autoPinEdge(.bottom, to: .top, of: panelView, withOffset: -15)
+        
+        resizePanel.autoSetDimension(.width, toSize: 40)
+        resizePanelX = resizePanel.autoPinEdge(.left, to: .right, of: view)
+        resizePanel.autoPinEdge(.top, to: .top, of: movePanel)
+        resizePanel.autoPinEdge(.bottom, to: .bottom, of: movePanel)
+    }
+    
+    func setupMovePanel() {
+        leftGesture = CustomGestureRecognizer(target: self, action: #selector(moveAction))
+        rightGesture = CustomGestureRecognizer(target: self, action: #selector(moveAction))
+        upGesture = CustomGestureRecognizer(target: self, action: #selector(moveAction))
+        downGesture = CustomGestureRecognizer(target: self, action: #selector(moveAction))
+        
+        movePanel.backgroundColor = .white
+        movePanel.layer.cornerRadius = 20
+        movePanel.isUserInteractionEnabled = true
+        movePanel.clipsToBounds = true
+        view.addSubview(movePanel)
+        
+        let leftImg = UIImageView(image: UIImage(named: "ic_left"))
+        leftImg.contentMode = .scaleAspectFit
+        
+        let leftZone = UIView()
+        leftZone.isUserInteractionEnabled = true
+        movePanel.addSubview(leftZone)
+        leftZone.addSubview(leftImg)
+        leftZone.addGestureRecognizer(leftGesture!)
+        leftGesture?.direction = .left
+        
+        leftImg.autoSetDimensions(to: CGSize(width: 15, height: 15))
+        leftImg.autoCenterInSuperview()
+        leftZone.autoPinEdge(toSuperviewEdge: .left)
+        leftZone.autoAlignAxis(toSuperviewAxis: .horizontal)
+        leftZone.autoSetDimensions(to: CGSize(width: 95 / 3, height: 95 / 3))
+        
+        let rightImg = UIImageView(image: UIImage(named: "ic_right"))
+        rightImg.contentMode = .scaleAspectFit
+        
+        let rightZone = UIView()
+        rightZone.isUserInteractionEnabled = true
+        movePanel.addSubview(rightZone)
+        rightZone.addSubview(rightImg)
+        rightZone.addGestureRecognizer(rightGesture!)
+        rightGesture?.direction = .right
+        
+        rightImg.autoSetDimensions(to: CGSize(width: 15, height: 15))
+        rightImg.autoCenterInSuperview()
+        rightZone.autoPinEdge(toSuperviewEdge: .right)
+        rightZone.autoAlignAxis(toSuperviewAxis: .horizontal)
+        rightZone.autoSetDimensions(to: CGSize(width: 95 / 3, height: 95 / 3))
+        
+        let upImg = UIImageView(image: UIImage(named: "ic_up"))
+        upImg.contentMode = .scaleAspectFit
+        
+        let upZone = UIView()
+        upZone.isUserInteractionEnabled = true
+        movePanel.addSubview(upZone)
+        upZone.addSubview(upImg)
+        upZone.addGestureRecognizer(upGesture!)
+        upGesture?.direction = .up
+        
+        upImg.autoSetDimensions(to: CGSize(width: 15, height: 15))
+        upImg.autoCenterInSuperview()
+        upZone.autoPinEdge(toSuperviewEdge: .top)
+        upZone.autoAlignAxis(toSuperviewAxis: .vertical)
+        upZone.autoSetDimensions(to: CGSize(width: 95 / 3, height: 95 / 3))
+        
+        let downImg = UIImageView(image: UIImage(named: "ic_down"))
+        downImg.contentMode = .scaleAspectFit
+        
+        let downZone = UIView()
+        downZone.isUserInteractionEnabled = true
+        movePanel.addSubview(downZone)
+        downZone.addSubview(downImg)
+        downZone.addGestureRecognizer(downGesture!)
+        downGesture?.direction = .down
+        
+        downImg.autoSetDimensions(to: CGSize(width: 15, height: 15))
+        downImg.autoCenterInSuperview()
+        downZone.autoPinEdge(toSuperviewEdge: .bottom)
+        downZone.autoAlignAxis(toSuperviewAxis: .vertical)
+        downZone.autoSetDimensions(to: CGSize(width: 95 / 3, height: 95 / 3))
+    }
+    
+    func setupResizePanel() {
+        resizePanel.backgroundColor = .white
+        resizePanel.layer.cornerRadius = 20
+        resizePanel.isUserInteractionEnabled = true
+        resizePanel.clipsToBounds = true
+        view.addSubview(resizePanel)
+        
+        let plusImg = UIImageView(image: UIImage(named: "ic_plus"))
+        plusImg.contentMode = .scaleAspectFit
+        
+        let plusZone = UIView()
+        resizePanel.addSubview(plusZone)
+        plusZone.addSubview(plusImg)
+        
+        plusImg.autoSetDimensions(to: CGSize(width: 15, height: 15))
+        plusImg.autoCenterInSuperview()
+        plusZone.autoPinEdge(toSuperviewEdge: .top)
+        plusZone.autoAlignAxis(toSuperviewAxis: .vertical)
+        plusZone.autoSetDimensions(to: CGSize(width: 40, height: 95 / 2))
+        
+        let minusImg = UIImageView(image: UIImage(named: "ic_minus"))
+        minusImg.contentMode = .scaleAspectFit
+        
+        let minusZone = UIView()
+        resizePanel.addSubview(minusZone)
+        minusZone.addSubview(minusImg)
+        
+        minusImg.autoSetDimensions(to: CGSize(width: 15, height: 15))
+        minusImg.autoCenterInSuperview()
+        minusZone.autoPinEdge(toSuperviewEdge: .bottom)
+        minusZone.autoAlignAxis(toSuperviewAxis: .vertical)
+        minusZone.autoSetDimensions(to: CGSize(width: 40, height: 95 / 2))
     }
     
     func setupMaterials() {
@@ -234,121 +407,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return node
     }
     
-    // MARK: dynamic panel behaviour
-    
-    @objc func onPanelAction(recognizer: UITapGestureRecognizer) {
+    @objc func onActionBtnClicked(recognizer: UITapGestureRecognizer) {
         guard !isCameraMode else { return }
-        
         actionButtonView.isUserInteractionEnabled = false
-        let startWidth = UIScreen.main.bounds.width / 1.5
-        
-        if isResizeMode {
-            isResizeMode = false
-            dynamicPanel.hideResizeElements()
-            dynamicPanel.showMainElements(withDelay: 0.2)
-            
-            UIView.animate(withDuration: 0.2, animations: {
-                self.dynamicPanelSize?.first?.constant = startWidth + 20
-                self.view.layoutIfNeeded()
-            }, completion: { finished in
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.dynamicPanelSize?.first?.constant = startWidth
-                    self.view.layoutIfNeeded()
-                }, completion: { finished in
-                    self.actionButtonView.isUserInteractionEnabled = true
-                })
-            })
-            return
-        }
-        
-        if isTranslateMode {
-            isTranslateMode = false
-            dynamicPanel.hideTranslateElements()
-            dynamicPanel.showMainElements(withDelay: 0.2)
-            
-            UIView.animate(withDuration: 0.2, animations: {
-                self.dynamicPanelSize?.first?.constant = startWidth + 20
-                self.dynamicPanelSize?.last?.constant = 66
-                self.view.layoutIfNeeded()
-            }, completion: { finished in
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.dynamicPanelSize?.first?.constant = startWidth
-                    self.view.layoutIfNeeded()
-                }, completion: { finished in
-                    self.actionButtonView.isUserInteractionEnabled = true
-                })
-            })
-            return
-        }
         
         if isPanelHidden {
-            showPanel()
+            panelShowsAnimation()
         }
         else {
-            hidePanel()
-        }
-    }
-    
-    func showPanel() {
-        let targetPosY = panelPosY!.constant - 20
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.panelPosY!.constant = targetPosY - 5
-            self.view.layoutIfNeeded()
-            self.dynamicPanel.alpha = 0.8
-            self.actionButtonView.transform = CGAffineTransform(rotationAngle: -(225.0 * .pi) / 180.0)
-        }, completion: { finished in
-            UIView.animate(withDuration: 0.1, animations: {
-                self.panelPosY!.constant = targetPosY
-                self.view.layoutIfNeeded()
-                self.dynamicPanel.alpha = 1
-            }, completion: { finished in
-                self.isPanelHidden = false
-                self.actionButtonView.isUserInteractionEnabled = true
-                self.dynamicPanel.isUserInteractionEnabled = true
-            })
-        })
-    }
-    
-    func hidePanel() {
-        let targetPosY = panelPosY!.constant + 20
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.panelPosY!.constant = targetPosY
-            self.view.layoutIfNeeded()
-            self.dynamicPanel.alpha = 0
-            self.actionButtonView.transform = CGAffineTransform(rotationAngle: 0)
-        }, completion: { finished in
-            self.isPanelHidden = true
-            self.actionButtonView.isUserInteractionEnabled = true
-            self.dynamicPanel.isUserInteractionEnabled = false
-        })
-    }
-    
-    // MARK: Translate object
-    
-    @objc func onLongPressed(recognizer: UILongPressGestureRecognizer) {
-        guard let recognizerView = recognizer.view as? ARSCNView else { return }
-        let touch = recognizer.location(in: recognizerView)
-        
-        if recognizer.state == .began {
-            let hitTestResult = sceneView.hitTest(touch, options: [SCNHitTestOption.categoryBitMask: CategoryBitMask.categoryToSelect.rawValue])
-            guard let hitNode = hitTestResult.first?.node.parent else { return }
-
-            self.selectedNode = hitNode
-        } else if recognizer.state == .changed {
-            guard let hitNode = selectedNode else { return }
-            
-            // perform a hitTest to obtain the plane
-            let hitTestPlane = sceneView.hitTest(touch, types: .existingPlane)
-            guard let hitPlane = hitTestPlane.first else { return }
-            
-            hitNode.position = SCNVector3(hitPlane.localTransform.columns.3.x,
-                                          -hitPlane.localTransform.columns.3.z,
-                                          hitNode.position.z)
-        } else if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
-            guard selectedNode != nil else { return }
-            self.selectedNode = nil
+            panelHidesAnimation()
         }
     }
     
@@ -356,6 +423,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @objc func onShotAction(recognizer: UITapGestureRecognizer) {
         guard !isCameraMode else { return }
+        
+        if !isPanelHidden {
+            panelHidesAnimation()
+        }
+        
         isCameraMode = true
         
         cameraActivateAnimation()
@@ -366,53 +438,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.actionButtonView.isUserInteractionEnabled = false
         
         cameraCloseAnimation()
-    }
-    
-    func pipetteAction() {
-        
-    }
-    
-    func resizeAction() {
-        actionButtonView.isUserInteractionEnabled = false
-        isResizeMode = true
-        
-        dynamicPanel.hideMainElements()
-        let startWidth = dynamicPanelSize?.first?.constant
-        
-        UIView.animate(withDuration: 0.1, animations: {
-            self.dynamicPanelSize?.first?.constant = startWidth! + 20
-            self.view.layoutIfNeeded()
-        }, completion: { finished in
-            UIView.animate(withDuration: 0.2, animations: {
-                self.dynamicPanel.showResizeElements()
-                self.dynamicPanelSize?.first?.constant = startWidth! / 2
-                self.view.layoutIfNeeded()
-            }, completion: { finished in
-                self.actionButtonView.isUserInteractionEnabled = true
-            })
-        })
-    }
-    
-    func translateAction() {
-        actionButtonView.isUserInteractionEnabled = false
-        isTranslateMode = true
-        
-        dynamicPanel.hideMainElements()
-        let startSize = dynamicPanelSize!
-        
-        UIView.animate(withDuration: 0.1, animations: {
-            self.dynamicPanelSize?.first?.constant = startSize.first!.constant + 20
-            self.view.layoutIfNeeded()
-        }, completion: { finished in
-            UIView.animate(withDuration: 0.2, animations: {
-                self.dynamicPanel.showTranslateElements()
-                self.dynamicPanelSize?.first?.constant = startSize.first!.constant / 2
-                self.dynamicPanelSize?.last?.constant = startSize.first!.constant
-                self.view.layoutIfNeeded()
-            }, completion: { finished in
-                self.actionButtonView.isUserInteractionEnabled = true
-            })
-        })
     }
     
     func increaseAction() {
@@ -431,10 +456,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         container.scale.z -= 0.01
     }
     
-    func moveAction(withDirection direction : Directions) {
+    @objc func moveAction(recognizer: CustomGestureRecognizer) {
         guard wheelAdded else { return }
         
-        switch direction {
+        switch recognizer.direction! {
         case .left:
             container.position = SCNVector3(container.position.x - 0.01, container.position.y, container.position.z)
         case .right:
@@ -475,5 +500,163 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             self.actionButtonView.isUserInteractionEnabled = true
             self.isCameraMode = false
         })
+    }
+    
+    func panelShowsAnimation() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.actionButtonView.transform = CGAffineTransform(rotationAngle: -(225.0 * .pi) / 180.0)
+            self.showComponents()
+        }, completion: { finished in
+            self.isPanelHidden = false
+            self.actionButtonView.isUserInteractionEnabled = true
+        })
+    }
+    
+    func panelHidesAnimation() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.actionButtonView.transform = CGAffineTransform(rotationAngle: 0)
+            self.hideComponents()
+        }, completion: { finished in
+            self.isPanelHidden = true
+            self.actionButtonView.isUserInteractionEnabled = true
+        })
+    }
+    
+    func showComponents()
+    {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.moveBtnX?.constant = -70
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.moveBtnX?.constant = -60
+                self.view.layoutIfNeeded()
+            })
+        })
+        
+        UIView.animate(withDuration: 0.2, delay: 0.1, options: UIView.AnimationOptions.curveEaseInOut, animations: {
+            self.scaleBtnX?.constant = -70
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.scaleBtnX?.constant = -60
+                self.view.layoutIfNeeded()
+            })
+        })
+        
+        UIView.animate(withDuration: 0.2, delay: 0.2, options: UIView.AnimationOptions.curveEaseInOut, animations: {
+            self.brushBtnX?.constant = -70
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.brushBtnX?.constant = -60
+                self.view.layoutIfNeeded()
+            })
+        })
+    }
+    
+    func hideComponents() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.moveBtnX?.constant = 0
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            
+        })
+        
+        UIView.animate(withDuration: 0.2, delay: 0.1, options: UIView.AnimationOptions.curveEaseInOut, animations: {
+            self.scaleBtnX?.constant = 0
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            
+        })
+        
+        UIView.animate(withDuration: 0.2, delay: 0.2, options: UIView.AnimationOptions.curveEaseInOut, animations: {
+            self.brushBtnX?.constant = 0
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            
+        })
+        
+        if isTranslateMode {
+            hideMovePanel()
+        }
+        
+        if isResizeMode {
+            hideResizePanel()
+        }
+    }
+    
+    func showMovePanel() {
+        isTranslateMode = true
+        UIView.animate(withDuration: 0.2, animations: {
+            self.movePanelX?.constant = -125
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.movePanelX?.constant = -115
+                self.view.layoutIfNeeded()
+            })
+        })
+    }
+    
+    func hideMovePanel() {
+        isTranslateMode = false
+        UIView.animate(withDuration: 0.2, animations: {
+            self.movePanelX?.constant = 0
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+        })
+    }
+    
+    func showResizePanel() {
+        isResizeMode = true
+        UIView.animate(withDuration: 0.2, animations: {
+            self.resizePanelX?.constant = -70
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.resizePanelX?.constant = -60
+                self.view.layoutIfNeeded()
+            })
+        })
+    }
+    
+    func hideResizePanel() {
+        isResizeMode = false
+        UIView.animate(withDuration: 0.2, animations: {
+            self.resizePanelX?.constant = 0
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+        })
+    }
+    
+    // MARK: buttons behaviours
+    
+    @objc func onMoveBtnAction(recognizer: UITapGestureRecognizer) {
+        if isTranslateMode {
+            hideMovePanel()
+        } else {
+            if isResizeMode {
+                hideResizePanel()
+            }
+            
+            showMovePanel()
+        }
+    }
+    
+    @objc func onScaleBtnAction(recognizer: UITapGestureRecognizer) {
+        if isResizeMode {
+            hideResizePanel()
+        } else {
+            if isTranslateMode {
+                hideMovePanel()
+            }
+            
+            showResizePanel()
+        }
+    }
+    
+    @objc func onBrushBtnAction(recognizer: UITapGestureRecognizer) {
+        
     }
 }
