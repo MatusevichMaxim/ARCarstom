@@ -60,9 +60,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var planeNode = SCNNode()
     var container = SCNNode()
-    var wheelNode = SCNNode()
+    var rimNodes = [SCNNode]()
     var brakeNode = SCNNode()
-    var wheelMaterial = SCNMaterial()
+    var rimMaterial = SCNMaterial()
     
     var selectedNode : SCNNode?
     var maskNode : SCNNode?
@@ -147,30 +147,51 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let portal = PortalMask(radius: portalDiameter)
                 container.addChildNode(portal)
                 
-                let rimScene = SCNScene(named: "scnassets/rim.scn")!
-                if let rimChildNode = rimScene.rootNode.childNode(withName: "rim", recursively: true) {
-                    wheelNode = SCNNode()
-                    wheelNode = rimChildNode
-                    wheelNode.position = SCNVector3(0, 0, -0.22)
-                    wheelNode.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
-                    wheelNode.eulerAngles.y = -.pi / 2
-                    wheelNode.geometry?.materials = [wheelMaterial]
+                let rimScene = SCNScene(named: "scnassets/rim_1.scn")!
+                if let rimChildNode = rimScene.rootNode.childNode(withName: "rim_1", recursively: true) {
+                    var rimNode1 = SCNNode()
+                    rimNode1 = rimChildNode
+                    rimNode1.position = SCNVector3(0, 0, -0.115)
+                    rimNode1.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
+                    rimNode1.eulerAngles.y = -.pi / 2
+                    rimNode1.geometry?.materials = [rimMaterial]
                     wheelAdded = true
                     hidePlane()
                     
                     maskNode = createMask()
-                    wheelNode.addChildNode(maskNode!)
+                    rimNode1.addChildNode(maskNode!)
                     maskNode!.position = SCNVector3(-50, 0, 0)
                     maskNode!.eulerAngles.y = .pi / 2
                     
-                    container.addChildNode(wheelNode)
+                    rimNodes.append(rimNode1)
+                    container.addChildNode(rimNode1)
+                }
+                
+                let rimScene2 = SCNScene(named: "scnassets/rim_2.scn")!
+                if let rimChildNode = rimScene2.rootNode.childNode(withName: "rim_2", recursively: true) {
+                    var rimNode2 = SCNNode()
+                    rimNode2 = rimChildNode
+                    rimNode2.position = SCNVector3(0, 0, -0.115)
+                    rimNode2.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
+                    rimNode2.eulerAngles.y = -.pi / 2
+                    rimNode2.geometry?.materials = [rimMaterial]
+                    wheelAdded = true
+                    hidePlane()
+                    
+                    maskNode = createMask()
+                    rimNode2.addChildNode(maskNode!)
+                    maskNode!.position = SCNVector3(-50, 0, 0)
+                    maskNode!.eulerAngles.y = .pi / 2
+                    
+                    rimNodes.append(rimNode2)
+                    container.addChildNode(rimNode2)
                 }
                 
                 let brakeScene = SCNScene(named: "scnassets/brake.scn")!
                 if let brakeChildNode = brakeScene.rootNode.childNode(withName: "brake", recursively: true) {
                     brakeNode = SCNNode()
                     brakeNode = brakeChildNode
-                    brakeNode.position = SCNVector3(0, 0, -0.22)
+                    brakeNode.position = SCNVector3(0, 0, -0.115)
                     brakeNode.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
                     brakeNode.eulerAngles.y = -.pi / 2
 
@@ -186,20 +207,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     brakeRotor?.geometry?.firstMaterial = createMaterial(light: false)
                     let bolts = geom?.childNode(withName: "Object020", recursively: true)
                     bolts?.geometry?.firstMaterial = createMaterial(light: false)
-                    let boltsExternal = geom?.childNode(withName: "Ferrari_F12_tdf_nut_F_002", recursively: true)
-                    boltsExternal?.geometry?.firstMaterial = createMaterial(light: true)
 
-                    setupRimMaterials(withColor: .white)
                     container.addChildNode(brakeNode)
                 }
 
+                for node in rimNodes {
+                    node.isHidden = true
+                }
+                rimNodes.first?.isHidden = false
+                
                 planeNode.addChildNode(container)
             }
         }
-    }
-    
-    func setupRimMaterials(withColor color: UIColor) {
-        
     }
     
     func createMaterial(light isLight: Bool) -> SCNMaterial {
@@ -466,9 +485,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func setupMaterials() {
-        wheelMaterial.lightingModel = .physicallyBased
-        wheelMaterial.metalness.contents = 1.0
-        wheelMaterial.roughness.contents = 0
+        rimMaterial.lightingModel = .physicallyBased
+        rimMaterial.metalness.contents = 1.0
+        rimMaterial.roughness.contents = 0
     }
     
     // MARK: Plane behaviour
@@ -535,9 +554,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @objc func onShopAction(recognizer: UITapGestureRecognizer) {
-        guard !wheelAdded else { return }
+        guard wheelAdded else { return }
         
-        
+        for node in rimNodes {
+            node.isHidden = !node.isHidden
+        }
     }
     
     @objc func onCameraMaskPressed(recognizer: UITapGestureRecognizer) {
@@ -581,11 +602,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @objc func colorAction(recognizer: ColorGestureRecognizer) {
         switch recognizer.rimColor! {
         case .silver:
-            wheelMaterial.diffuse.contents = UIColor.white
+            rimMaterial.diffuse.contents = UIColor.white
         case .dark:
-            wheelMaterial.diffuse.contents = UIColor.darkGray
+            rimMaterial.diffuse.contents = UIColor.darkGray
         case .gold:
-            wheelMaterial.diffuse.contents = UIColor(red: 174/255, green: 193/255, blue: 0/255, alpha: 1.0)//UIColor.yellow
+            rimMaterial.diffuse.contents = UIColor(red: 174/255, green: 193/255, blue: 0/255, alpha: 1.0)
         }
     }
     
