@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  ARCarstom
-//
-//  Created by Максим Матусевич on 5/11/19.
-//  Copyright © 2019 Максим Матусевич. All rights reserved.
-//
-
 import UIKit
 import SceneKit
 import ARKit
@@ -51,6 +43,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var moveGesture: UITapGestureRecognizer?
     var scaleGesture: UITapGestureRecognizer?
     var brushGesture: UITapGestureRecognizer?
+    var shopGesture: UITapGestureRecognizer?
     
     var leftGesture: CustomGestureRecognizer?
     var rightGesture: CustomGestureRecognizer?
@@ -98,6 +91,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         shotGesture = UITapGestureRecognizer(target: self, action: #selector(onShotAction))
         actionGesture = UITapGestureRecognizer(target: self, action: #selector(onActionBtnClicked))
         cameraMaskGesture = UITapGestureRecognizer(target: self, action: #selector(onCameraMaskPressed))
+        shopGesture = UITapGestureRecognizer(target: self, action: #selector(onShopAction))
         
         moveGesture = UITapGestureRecognizer(target: self, action: #selector(onMoveBtnAction))
         scaleGesture = UITapGestureRecognizer(target: self, action: #selector(onScaleBtnAction))
@@ -112,6 +106,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.run(configuration)
         
         shotButton.addGestureRecognizer(shotGesture!)
+        shopButton.addGestureRecognizer(shopGesture!)
         actionButtonView.addGestureRecognizer(actionGesture!)
         cameraMaskView.addGestureRecognizer(cameraMaskGesture!)
         moveButton.addGestureRecognizer(moveGesture!)
@@ -124,6 +119,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
         
         shotButton.removeGestureRecognizer(shotGesture!)
+        shopButton.removeGestureRecognizer(shopGesture!)
         actionButtonView.removeGestureRecognizer(actionGesture!)
         cameraMaskView.removeGestureRecognizer(cameraMaskGesture!)
         moveButton.removeGestureRecognizer(moveGesture!)
@@ -134,8 +130,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         
-        planeNode = createPlane(withPlaneAnchor: planeAnchor)
-        node.addChildNode(planeNode)
+        if !wheelAdded {
+            planeNode = createPlane(withPlaneAnchor: planeAnchor)
+            node.addChildNode(planeNode)
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -242,7 +240,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         cameraMaskView.autoCenterInSuperview()
         cameraMaskSize = cameraMaskView.autoSetDimensions(to: CGSize(width: 0, height: 0))
         
-        bottomPanelConstraint.constant = UIDevice.isXDevice() ? 0 : -20
+        bottomPanelConstraint.constant = UIDevice.isXDevice() ? 0 : 20
     }
     
     func setupSettingsPanel() {
@@ -534,6 +532,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         isCameraMode = true
         
         cameraActivateAnimation()
+    }
+    
+    @objc func onShopAction(recognizer: UITapGestureRecognizer) {
+        guard !wheelAdded else { return }
+        
+        
     }
     
     @objc func onCameraMaskPressed(recognizer: UITapGestureRecognizer) {

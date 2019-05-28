@@ -51,7 +51,7 @@
                                             <constraint firstAttribute="width" constant="30" id="shK-LO-yFT"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_shop" translatesAutoresizingMaskIntoConstraints="NO" id="eef-T2-ZW5" userLabel="shopButton">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_switch" translatesAutoresizingMaskIntoConstraints="NO" id="eef-T2-ZW5" userLabel="shopButton">
                                         <rect key="frame" x="343" y="30" width="36" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="36" id="dUQ-DD-YZT"/>
@@ -106,7 +106,7 @@
     <resources>
         <image name="ic_camera" width="48.5" height="48.5"/>
         <image name="ic_frame" width="48.5" height="41"/>
-        <image name="ic_shop" width="57.5" height="45"/>
+        <image name="ic_switch" width="170.5" height="170.5"/>
         <image name="ic_wrench" width="41.5" height="41.5"/>
         <image name="panel" width="629" height="133.5"/>
     </resources>
