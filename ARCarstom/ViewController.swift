@@ -74,6 +74,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var isTranslateMode : Bool = false
     var isPaletteMode : Bool = false
     
+    var currentRimId : Int = 0
+    
     
     // MARK: Base methods
     
@@ -149,42 +151,23 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 
                 let rimScene = SCNScene(named: "scnassets/rim_1.scn")!
                 if let rimChildNode = rimScene.rootNode.childNode(withName: "rim_1", recursively: true) {
-                    var rimNode1 = SCNNode()
-                    rimNode1 = rimChildNode
-                    rimNode1.position = SCNVector3(0, 0, -0.115)
-                    rimNode1.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
-                    rimNode1.eulerAngles.y = -.pi / 2
-                    rimNode1.geometry?.materials = [rimMaterial]
-                    wheelAdded = true
-                    hidePlane()
-                    
-                    maskNode = createMask()
-                    rimNode1.addChildNode(maskNode!)
-                    maskNode!.position = SCNVector3(-50, 0, 0)
-                    maskNode!.eulerAngles.y = .pi / 2
-                    
+                    let rimNode1 = createRim(fromNode: rimChildNode)
                     rimNodes.append(rimNode1)
                     container.addChildNode(rimNode1)
                 }
                 
                 let rimScene2 = SCNScene(named: "scnassets/rim_2.scn")!
                 if let rimChildNode = rimScene2.rootNode.childNode(withName: "rim_2", recursively: true) {
-                    var rimNode2 = SCNNode()
-                    rimNode2 = rimChildNode
-                    rimNode2.position = SCNVector3(0, 0, -0.115)
-                    rimNode2.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
-                    rimNode2.eulerAngles.y = -.pi / 2
-                    rimNode2.geometry?.materials = [rimMaterial]
-                    wheelAdded = true
-                    hidePlane()
-                    
-                    maskNode = createMask()
-                    rimNode2.addChildNode(maskNode!)
-                    maskNode!.position = SCNVector3(-50, 0, 0)
-                    maskNode!.eulerAngles.y = .pi / 2
-                    
+                    let rimNode2 = createRim(fromNode: rimChildNode)
                     rimNodes.append(rimNode2)
                     container.addChildNode(rimNode2)
+                }
+
+                let rimScene3 = SCNScene(named: "scnassets/rim_3.scn")!
+                if let rimChildNode = rimScene3.rootNode.childNode(withName: "rim_3", recursively: true) {
+                    let rimNode3 = createRim(fromNode: rimChildNode)
+                    rimNodes.append(rimNode3)
+                    container.addChildNode(rimNode3)
                 }
                 
                 let brakeScene = SCNScene(named: "scnassets/brake.scn")!
@@ -210,6 +193,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
                     container.addChildNode(brakeNode)
                 }
+                
+                maskNode = createMask()
+                container.addChildNode(maskNode!)
+                maskNode!.position = SCNVector3(0, 0, -0.5)
+//                maskNode!.eulerAngles.y = .pi / 2
 
                 for node in rimNodes {
                     node.isHidden = true
@@ -219,6 +207,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 planeNode.addChildNode(container)
             }
         }
+    }
+    
+    func createRim(fromNode node : SCNNode) -> SCNNode {
+        var rim = SCNNode()
+        rim = node
+        rim.position = SCNVector3(0, 0, -0.115)
+        rim.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
+        rim.eulerAngles.y = -.pi / 2
+        rim.geometry?.materials = [rimMaterial]
+        wheelAdded = true
+        hidePlane()
+    
+        return rim
     }
     
     func createMaterial(light isLight: Bool) -> SCNMaterial {
@@ -437,15 +438,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let darkGesture = ColorGestureRecognizer(target: self, action: #selector(colorAction))
         let goldGesture = ColorGestureRecognizer(target: self, action: #selector(colorAction))
         
-        palettePanel.backgroundColor = .white
+        palettePanel.backgroundColor = .clear
         palettePanel.layer.cornerRadius = 20
         palettePanel.isUserInteractionEnabled = true
         palettePanel.clipsToBounds = true
         view.addSubview(palettePanel)
         
         let silverColor = UIView()
-        silverColor.layer.cornerRadius = 12
-        silverColor.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        silverColor.layer.cornerRadius = 13
+        silverColor.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
         silverColor.layer.borderWidth = 2
         silverColor.backgroundColor = .lightGray
         palettePanel.addSubview(silverColor)
@@ -457,8 +458,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         silverColor.autoPinEdge(toSuperviewEdge: .top, withInset: 15)
         
         let darkColor = UIView()
-        darkColor.layer.cornerRadius = 12
-        darkColor.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        darkColor.layer.cornerRadius = 13
+        darkColor.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
         darkColor.layer.borderWidth = 2
         darkColor.backgroundColor = .darkGray
         palettePanel.addSubview(darkColor)
@@ -470,10 +471,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         darkColor.autoPinEdge(.top, to: .bottom, of: silverColor, withOffset: 10)
         
         let goldColor = UIView()
-        goldColor.layer.cornerRadius = 12
-        goldColor.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        goldColor.layer.cornerRadius = 13
+        goldColor.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
         goldColor.layer.borderWidth = 2
-        goldColor.backgroundColor = .yellow
+        goldColor.backgroundColor = UIColor(red: 191, green: 155, blue: 48)
         palettePanel.addSubview(goldColor)
         goldColor.addGestureRecognizer(goldGesture)
         goldGesture.rimColor = .gold
@@ -516,7 +517,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func createMask() -> SCNNode {
-        let maskPlane = SCNPlane(width: CGFloat(100), height: CGFloat(100))
+        let maskPlane = SCNPlane(width: CGFloat(1), height: CGFloat(1))
         let maskMaterial = SCNMaterial()
         maskMaterial.diffuse.contents = UIImage(named: "scnassets/mask.png")
         maskPlane.materials = [maskMaterial]
@@ -556,9 +557,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @objc func onShopAction(recognizer: UITapGestureRecognizer) {
         guard wheelAdded else { return }
         
-        for node in rimNodes {
-            node.isHidden = !node.isHidden
+        rimNodes[currentRimId].isHidden = true
+        currentRimId += 1
+        if currentRimId == 3 {
+            currentRimId = 0
         }
+        rimNodes[currentRimId].isHidden = false
     }
     
     @objc func onCameraMaskPressed(recognizer: UITapGestureRecognizer) {
@@ -606,7 +610,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         case .dark:
             rimMaterial.diffuse.contents = UIColor.darkGray
         case .gold:
-            rimMaterial.diffuse.contents = UIColor(red: 174/255, green: 193/255, blue: 0/255, alpha: 1.0)
+            rimMaterial.diffuse.contents = UIColor(red: 191, green: 155, blue: 48)
         }
     }
     
