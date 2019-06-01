@@ -23,6 +23,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var movePanel = UIView()
     var resizePanel = UIView()
+    var shopPanel = ShopView()
     
     var moveBtnX: NSLayoutConstraint?
     var scaleBtnX: NSLayoutConstraint?
@@ -249,6 +250,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         cameraMaskView.translatesAutoresizingMaskIntoConstraints = true
         cameraMaskView.layer.cornerRadius = 25
         actionButtonView.addSubview(cameraMaskView)
+        
+        shopPanel.isUserInteractionEnabled = false
+        shopPanel.controller = self
+        view.addSubview(shopPanel)
 
         actionButtonImage.autoCenterInSuperview()
         actionButtonImage.autoSetDimensions(to: CGSize(width: 24, height: 24))
@@ -261,6 +266,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         cameraMaskSize = cameraMaskView.autoSetDimensions(to: CGSize(width: 0, height: 0))
         
         bottomPanelConstraint.constant = UIDevice.isXDevice() ? 0 : 20
+        
+        shopPanel.autoPinEdgesToSuperviewEdges()
     }
     
     func setupSettingsPanel() {
@@ -528,6 +535,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return node
     }
     
+    func switchRim(atId : Int) {
+        rimNodes[currentRimId].isHidden = true
+        rimNodes[atId].isHidden = false
+        currentRimId = atId
+    }
+    
     @objc func onActionBtnClicked(recognizer: UITapGestureRecognizer) {
         guard !isCameraMode else { return }
         actionButtonView.isUserInteractionEnabled = false
@@ -557,12 +570,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @objc func onShopAction(recognizer: UITapGestureRecognizer) {
         guard wheelAdded else { return }
         
-        rimNodes[currentRimId].isHidden = true
-        currentRimId += 1
-        if currentRimId == 3 {
-            currentRimId = 0
+        if isCameraMode {
+            cameraCloseAnimation()
         }
-        rimNodes[currentRimId].isHidden = false
+        
+        if !isPanelHidden {
+            panelHidesAnimation()
+        }
+        
+        shopPanel.isUserInteractionEnabled = true
+        shopPanel.showPanel()
     }
     
     @objc func onCameraMaskPressed(recognizer: UITapGestureRecognizer) {
