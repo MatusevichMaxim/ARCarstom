@@ -53,22 +53,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var increaseGesture: UITapGestureRecognizer?
     var reduceGesture: UITapGestureRecognizer?
     
-    var dynamicPanelSize :[NSLayoutConstraint]?
+    var dynamicPanelSize : [NSLayoutConstraint]?
     var cameraMaskSize : [NSLayoutConstraint]?
     
     let wheelDiameter : CGFloat = 0.01
     let portalDiameter : CGFloat = 0.245
     
-    var planeNode = SCNNode()
-    var container = SCNNode()
-    var rimNodes = [SCNNode]()
-    var brakeNode = SCNNode()
+    var firstPlaneNode = SCNNode()
+    var firstContainer = SCNNode()
+    var firstRimNodes = [SCNNode]()
+    var secondPlaneNode = SCNNode()
+    var secondContainer = SCNNode()
+    var secondRimNodes = [SCNNode]()
     var rimMaterial = SCNMaterial()
     
     var selectedNode : SCNNode?
     var maskNode : SCNNode?
     
-    var wheelAdded : Bool = false
+    var firstWheelAdded : Bool = false
+    var secondWheelAdded : Bool = false
     var isPanelHidden : Bool = true
     var isCameraMode : Bool = false
     var isResizeMode : Bool = false
@@ -87,7 +90,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.autoenablesDefaultLighting = true
         
-        setupUi()
+        setupView()
         setupSettingsPanel()
         setupMaterials()
         
@@ -133,81 +136,108 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         
-        if !wheelAdded {
-            planeNode = createPlane(withPlaneAnchor: planeAnchor)
-            node.addChildNode(planeNode)
+        if !firstWheelAdded {
+            firstPlaneNode = createPlane(withPlaneAnchor: planeAnchor)
+            node.addChildNode(firstPlaneNode)
+        } else if firstWheelAdded && !secondWheelAdded {
+            secondPlaneNode = createPlane(withPlaneAnchor: planeAnchor)
+            node.addChildNode(secondPlaneNode)
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard !wheelAdded else { return }
+        guard !firstWheelAdded || !secondWheelAdded else { return }
 
         if let touch = touches.first {
             let touchLocation = touch.location(in: sceneView)
 
             let results = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
             if results.first != nil {
-                let portal = PortalMask(radius: portalDiameter)
-                container.addChildNode(portal)
-                
-                let rimScene = SCNScene(named: "scnassets/rim_1.scn")!
-                if let rimChildNode = rimScene.rootNode.childNode(withName: "rim_1", recursively: true) {
-                    let rimNode1 = createRim(fromNode: rimChildNode)
-                    rimNodes.append(rimNode1)
-                    container.addChildNode(rimNode1)
+                if !firstWheelAdded {
+                    createRimSceleton(rimsCollection: &firstRimNodes, container: firstContainer)
+                    
+                    firstPlaneNode.addChildNode(firstContainer)
+                    firstWheelAdded = true
+                    
+                    UIView.animate(withDuration: 1, animations: {
+                        self.firstPlaneNode.geometry?.firstMaterial?.transparency = 0
+                    })
+                } else
+                {
+                    if !secondWheelAdded {
+                        createRimSceleton(rimsCollection: &secondRimNodes, container: secondContainer)
+                        
+                        secondPlaneNode.addChildNode(secondContainer)
+                        secondWheelAdded = true
+                        
+                        UIView.animate(withDuration: 1, animations: {
+                            self.secondPlaneNode.geometry?.firstMaterial?.transparency = 0
+                        })
+                        
+                        self.sceneView.debugOptions = []
+                    }
                 }
-                
-                let rimScene2 = SCNScene(named: "scnassets/rim_2.scn")!
-                if let rimChildNode = rimScene2.rootNode.childNode(withName: "rim_2", recursively: true) {
-                    let rimNode2 = createRim(fromNode: rimChildNode)
-                    rimNodes.append(rimNode2)
-                    container.addChildNode(rimNode2)
-                }
-
-                let rimScene3 = SCNScene(named: "scnassets/rim_3.scn")!
-                if let rimChildNode = rimScene3.rootNode.childNode(withName: "rim_3", recursively: true) {
-                    let rimNode3 = createRim(fromNode: rimChildNode)
-                    rimNodes.append(rimNode3)
-                    container.addChildNode(rimNode3)
-                }
-                
-                let brakeScene = SCNScene(named: "scnassets/brake.scn")!
-                if let brakeChildNode = brakeScene.rootNode.childNode(withName: "brake", recursively: true) {
-                    brakeNode = SCNNode()
-                    brakeNode = brakeChildNode
-                    brakeNode.position = SCNVector3(0, 0, -0.115)
-                    brakeNode.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
-                    brakeNode.eulerAngles.y = -.pi / 2
-
-                    let geom = brakeNode.childNode(withName: "Geom", recursively: true)
-
-                    let disk = geom?.childNode(withName: "Disk", recursively: true)
-                    disk?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "scnassets/brakeDisk.png")
-                    let caliper = geom?.childNode(withName: "Caliper_Brembo_8P", recursively: true)
-                    caliper?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "scnassets/caliper.png")
-                    let massNuts = geom?.childNode(withName: "Wheel_mass_nuts", recursively: true)
-                    massNuts?.geometry?.firstMaterial = createMaterial(light: false)
-                    let brakeRotor = geom?.childNode(withName: "Brake_rotor", recursively: true)
-                    brakeRotor?.geometry?.firstMaterial = createMaterial(light: false)
-                    let bolts = geom?.childNode(withName: "Object020", recursively: true)
-                    bolts?.geometry?.firstMaterial = createMaterial(light: false)
-
-                    container.addChildNode(brakeNode)
-                }
-                
-                maskNode = createMask()
-                container.addChildNode(maskNode!)
-                maskNode!.position = SCNVector3(0, 0, -0.5)
-//                maskNode!.eulerAngles.y = .pi / 2
-
-                for node in rimNodes {
-                    node.isHidden = true
-                }
-                rimNodes.first?.isHidden = false
-                
-                planeNode.addChildNode(container)
             }
         }
+    }
+    
+    func createRimSceleton(rimsCollection : inout [SCNNode], container : SCNNode) {
+        let portal = PortalMask(radius: portalDiameter)
+        container.addChildNode(portal)
+        
+        let rimScene = SCNScene(named: "scnassets/rim_1.scn")!
+        if let rimChildNode = rimScene.rootNode.childNode(withName: "rim_1", recursively: true) {
+            let rimNode1 = createRim(fromNode: rimChildNode)
+            rimsCollection.append(rimNode1)
+            container.addChildNode(rimNode1)
+        }
+        
+        let rimScene2 = SCNScene(named: "scnassets/rim_2.scn")!
+        if let rimChildNode = rimScene2.rootNode.childNode(withName: "rim_2", recursively: true) {
+            let rimNode2 = createRim(fromNode: rimChildNode)
+            rimsCollection.append(rimNode2)
+            container.addChildNode(rimNode2)
+        }
+        
+        let rimScene3 = SCNScene(named: "scnassets/rim_3.scn")!
+        if let rimChildNode = rimScene3.rootNode.childNode(withName: "rim_3", recursively: true) {
+            let rimNode3 = createRim(fromNode: rimChildNode)
+            rimsCollection.append(rimNode3)
+            container.addChildNode(rimNode3)
+        }
+        
+        let brakeScene = SCNScene(named: "scnassets/brake.scn")!
+        if let brakeChildNode = brakeScene.rootNode.childNode(withName: "brake", recursively: true) {
+            var brakeNode = SCNNode()
+            brakeNode = brakeChildNode
+            brakeNode.position = SCNVector3(0, 0, -0.115)
+            brakeNode.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
+            brakeNode.eulerAngles.y = -.pi / 2
+            
+            let geom = brakeNode.childNode(withName: "Geom", recursively: true)
+            
+            let disk = geom?.childNode(withName: "Disk", recursively: true)
+            disk?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "scnassets/brakeDisk.png")
+            let caliper = geom?.childNode(withName: "Caliper_Brembo_8P", recursively: true)
+            caliper?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "scnassets/caliper.png")
+            let massNuts = geom?.childNode(withName: "Wheel_mass_nuts", recursively: true)
+            massNuts?.geometry?.firstMaterial = createMaterial(light: false)
+            let brakeRotor = geom?.childNode(withName: "Brake_rotor", recursively: true)
+            brakeRotor?.geometry?.firstMaterial = createMaterial(light: false)
+            let bolts = geom?.childNode(withName: "Object020", recursively: true)
+            bolts?.geometry?.firstMaterial = createMaterial(light: false)
+            
+            container.addChildNode(brakeNode)
+        }
+        
+        maskNode = createMask()
+        container.addChildNode(maskNode!)
+        maskNode!.position = SCNVector3(0, 0, -0.5)
+        
+        for node in rimsCollection {
+            node.isHidden = true
+        }
+        rimsCollection.first?.isHidden = false
     }
     
     func createRim(fromNode node : SCNNode) -> SCNNode {
@@ -217,12 +247,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         rim.scale = SCNVector3(wheelDiameter, wheelDiameter, wheelDiameter)
         rim.eulerAngles.y = -.pi / 2
         rim.geometry?.materials = [rimMaterial]
-        wheelAdded = true
-        hidePlane()
-    
+        
         return rim
     }
-    
+
     func createMaterial(light isLight: Bool) -> SCNMaterial {
         let material = SCNMaterial()
         material.lightingModel = .physicallyBased
@@ -235,7 +263,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // MARK: Setup
     
-    func setupUi() {
+    func setupView() {
         actionButtonView.backgroundColor = UIColor(red: 236, green: 69, blue: 38)
         actionButtonView.layer.cornerRadius = 33
         actionButtonView.isUserInteractionEnabled = true
@@ -515,14 +543,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return planeNode
     }
     
-    func hidePlane() {
-        UIView.animate(withDuration: 1, animations: {
-            self.planeNode.geometry?.firstMaterial?.transparency = 0
-        })
-        
-        self.sceneView.debugOptions = []
-    }
-    
     func createMask() -> SCNNode {
         let maskPlane = SCNPlane(width: CGFloat(1), height: CGFloat(1))
         let maskMaterial = SCNMaterial()
@@ -536,8 +556,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func switchRim(atId : Int) {
-        rimNodes[currentRimId].isHidden = true
-        rimNodes[atId].isHidden = false
+        firstRimNodes[currentRimId].isHidden = true
+        firstRimNodes[atId].isHidden = false
         currentRimId = atId
     }
     
@@ -568,7 +588,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @objc func onShopAction(recognizer: UITapGestureRecognizer) {
-        guard wheelAdded else { return }
+        guard firstWheelAdded else { return }
         
         if isCameraMode {
             cameraCloseAnimation()
@@ -590,33 +610,33 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @objc func increaseAction(recognizer: UITapGestureRecognizer) {
-        guard wheelAdded else { return }
+        guard firstWheelAdded else { return }
         
-        container.scale.x += 0.01
-        container.scale.y += 0.01
-        container.scale.z += 0.01
+        firstContainer.scale.x += 0.01
+        firstContainer.scale.y += 0.01
+        firstContainer.scale.z += 0.01
     }
     
     @objc func reduceAction(recognizer: UITapGestureRecognizer) {
-        guard wheelAdded else { return }
+        guard firstWheelAdded else { return }
         
-        container.scale.x -= 0.01
-        container.scale.y -= 0.01
-        container.scale.z -= 0.01
+        firstContainer.scale.x -= 0.01
+        firstContainer.scale.y -= 0.01
+        firstContainer.scale.z -= 0.01
     }
     
     @objc func moveAction(recognizer: CustomGestureRecognizer) {
-        guard wheelAdded else { return }
+        guard firstWheelAdded else { return }
         
         switch recognizer.direction! {
         case .left:
-            container.position = SCNVector3(container.position.x - 0.005, container.position.y, container.position.z)
+            firstContainer.position = SCNVector3(firstContainer.position.x - 0.005, firstContainer.position.y, firstContainer.position.z)
         case .right:
-            container.position = SCNVector3(container.position.x + 0.005, container.position.y, container.position.z)
+            firstContainer.position = SCNVector3(firstContainer.position.x + 0.005, firstContainer.position.y, firstContainer.position.z)
         case .up:
-            container.position = SCNVector3(container.position.x, container.position.y + 0.005, container.position.z)
+            firstContainer.position = SCNVector3(firstContainer.position.x, firstContainer.position.y + 0.005, firstContainer.position.z)
         case .down:
-            container.position = SCNVector3(container.position.x, container.position.y - 0.005, container.position.z)
+            firstContainer.position = SCNVector3(firstContainer.position.x, firstContainer.position.y - 0.005, firstContainer.position.z)
         }
     }
     
