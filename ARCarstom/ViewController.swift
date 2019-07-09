@@ -133,16 +133,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         brushButton.removeGestureRecognizer(brushGesture!)
     }
     
-    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return nil }
+        
+        let node = SCNNode()
         
         if !firstWheelAdded {
             firstPlaneNode = createPlane(withPlaneAnchor: planeAnchor)
             node.addChildNode(firstPlaneNode)
-        } else if firstWheelAdded && !secondWheelAdded {
-            secondPlaneNode = createPlane(withPlaneAnchor: planeAnchor)
-            node.addChildNode(secondPlaneNode)
+        } else {
+            if !secondWheelAdded {
+                secondPlaneNode = createPlane(withPlaneAnchor: planeAnchor)
+                node.addChildNode(secondPlaneNode)
+            }
         }
+        
+        return node
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -558,6 +564,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func switchRim(atId : Int) {
         firstRimNodes[currentRimId].isHidden = true
         firstRimNodes[atId].isHidden = false
+        
+        secondRimNodes[currentRimId].isHidden = true
+        secondRimNodes[atId].isHidden = false
+        
         currentRimId = atId
     }
     
