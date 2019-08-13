@@ -5,4 +5,7 @@ target 'ARCarstom' do
 
   pod 'PortalMask'
   pod 'PureLayout'
+  pod 'Firebase/Core'
+  pod 'Firebase/MLModelInterpreter'
+  pod 'Firebase/Analytics'
 end

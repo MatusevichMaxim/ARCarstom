@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "76656E22CCE42C972E51D8D6A04B17B7"
+               BlueprintIdentifier = "9A78C6FE15B75093DC8A6F919891CE58"
                BuildableName = "PortalMask.framework"
                BlueprintName = "PortalMask"
                ReferencedContainer = "container:Pods.xcodeproj">

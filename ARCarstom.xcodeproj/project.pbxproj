@@ -8,30 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		855EBC566F608DA2A35BE96C /* Pods_ARCarstom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */; };
-		8B8AB4B622A26FED009D5D3E /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8AB4B522A26FED009D5D3E /* ShopView.swift */; };
-		8B8C5CB8229C7BF6008BC0F2 /* CustomGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C5CB7229C7BF6008BC0F2 /* CustomGestureRecognizer.swift */; };
-		8B8C5CBA229C8562008BC0F2 /* ColorGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C5CB9229C8562008BC0F2 /* ColorGestureRecognizer.swift */; };
-		8B8C5CBC229C8575008BC0F2 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C5CBB229C8575008BC0F2 /* File.swift */; };
-		8B97AA62228C284200C6E270 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B97AA61228C284200C6E270 /* ColorExtension.swift */; };
+		8B1498CA2303714C00F50613 /* model_2019_07_21_07_08.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 8B1498C72303714B00F50613 /* model_2019_07_21_07_08.tflite */; };
+		8B1498CB2303714C00F50613 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B1498C82303714C00F50613 /* GoogleService-Info.plist */; };
+		8B1498CC2303714C00F50613 /* wheeltest.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1498C92303714C00F50613 /* wheeltest.png */; };
+		8B1498CF2303715500F50613 /* UIImage+PixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1498CD2303715500F50613 /* UIImage+PixelBuffer.swift */; };
+		8B1498D02303715500F50613 /* WatchDog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1498CE2303715500F50613 /* WatchDog.swift */; };
 		8B9A08852286EB160002BEE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A08842286EB160002BEE5 /* AppDelegate.swift */; };
 		8B9A08892286EB160002BEE5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A08882286EB160002BEE5 /* ViewController.swift */; };
 		8B9A088C2286EB160002BEE5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A088A2286EB160002BEE5 /* Main.storyboard */; };
 		8B9A088E2286EB160002BEE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A088D2286EB160002BEE5 /* Assets.xcassets */; };
 		8B9A08912286EB160002BEE5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A088F2286EB160002BEE5 /* LaunchScreen.storyboard */; };
 		8B9FF27722877AF900F4C969 /* scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9FF27622877AF900F4C969 /* scnassets */; };
-		8BCBE6632299FCAB002F6EB0 /* Directions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBE6622299FCAB002F6EB0 /* Directions.swift */; };
-		8BCBE665229A0343002F6EB0 /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBE664229A0343002F6EB0 /* DeviceHelper.swift */; };
+		8BFEF21E2303788F0075B08A /* IntExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFEF21D2303788F0075B08A /* IntExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2DF95171F16519515772A046 /* Pods-ARCarstom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARCarstom.release.xcconfig"; path = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.release.xcconfig"; sourceTree = "<group>"; };
 		64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARCarstom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		87B6D79152EB5E75343C8677 /* Pods-ARCarstom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARCarstom.debug.xcconfig"; path = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.debug.xcconfig"; sourceTree = "<group>"; };
-		8B8AB4B522A26FED009D5D3E /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
-		8B8C5CB7229C7BF6008BC0F2 /* CustomGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGestureRecognizer.swift; sourceTree = "<group>"; };
-		8B8C5CB9229C8562008BC0F2 /* ColorGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGestureRecognizer.swift; sourceTree = "<group>"; };
-		8B8C5CBB229C8575008BC0F2 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
-		8B97AA61228C284200C6E270 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		8B1498C72303714B00F50613 /* model_2019_07_21_07_08.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = model_2019_07_21_07_08.tflite; sourceTree = "<group>"; };
+		8B1498C82303714C00F50613 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8B1498C92303714C00F50613 /* wheeltest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wheeltest.png; sourceTree = "<group>"; };
+		8B1498CD2303715500F50613 /* UIImage+PixelBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+PixelBuffer.swift"; sourceTree = "<group>"; };
+		8B1498CE2303715500F50613 /* WatchDog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchDog.swift; sourceTree = "<group>"; };
 		8B9A08812286EB160002BEE5 /* ARCarstom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARCarstom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9A08842286EB160002BEE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B9A08882286EB160002BEE5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -40,8 +39,7 @@
 		8B9A08902286EB160002BEE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B9A08922286EB160002BEE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B9FF27622877AF900F4C969 /* scnassets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scnassets; sourceTree = "<group>"; };
-		8BCBE6622299FCAB002F6EB0 /* Directions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Directions.swift; sourceTree = "<group>"; };
-		8BCBE664229A0343002F6EB0 /* DeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
+		8BFEF21D2303788F0075B08A /* IntExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +74,6 @@
 		8B84181D2299FC7C00BB10BC /* Enums */ = {
 			isa = PBXGroup;
 			children = (
-				8BCBE6622299FCAB002F6EB0 /* Directions.swift */,
-				8B8C5CBB229C8575008BC0F2 /* File.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -85,10 +81,8 @@
 		8B97AA5F228C18AF00C6E270 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				8B97AA61228C284200C6E270 /* ColorExtension.swift */,
-				8BCBE664229A0343002F6EB0 /* DeviceHelper.swift */,
-				8B8C5CB7229C7BF6008BC0F2 /* CustomGestureRecognizer.swift */,
-				8B8C5CB9229C8562008BC0F2 /* ColorGestureRecognizer.swift */,
+				8B1498CD2303715500F50613 /* UIImage+PixelBuffer.swift */,
+				8B1498CE2303715500F50613 /* WatchDog.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -114,16 +108,20 @@
 		8B9A08832286EB160002BEE5 /* ARCarstom */ = {
 			isa = PBXGroup;
 			children = (
+				8BFEF21C2303786F0075B08A /* Extensions */,
 				8B84181D2299FC7C00BB10BC /* Enums */,
 				8BB52F5B22966B1000951680 /* CustomViews */,
 				8B97AA5F228C18AF00C6E270 /* Helpers */,
 				8B9FF27622877AF900F4C969 /* scnassets */,
+				8B9A088D2286EB160002BEE5 /* Assets.xcassets */,
 				8B9A08842286EB160002BEE5 /* AppDelegate.swift */,
 				8B9A08882286EB160002BEE5 /* ViewController.swift */,
 				8B9A088A2286EB160002BEE5 /* Main.storyboard */,
-				8B9A088D2286EB160002BEE5 /* Assets.xcassets */,
+				8B1498C82303714C00F50613 /* GoogleService-Info.plist */,
+				8B1498C72303714B00F50613 /* model_2019_07_21_07_08.tflite */,
 				8B9A088F2286EB160002BEE5 /* LaunchScreen.storyboard */,
 				8B9A08922286EB160002BEE5 /* Info.plist */,
+				8B1498C92303714C00F50613 /* wheeltest.png */,
 			);
 			path = ARCarstom;
 			sourceTree = "<group>";
@@ -131,9 +129,16 @@
 		8BB52F5B22966B1000951680 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				8B8AB4B522A26FED009D5D3E /* ShopView.swift */,
 			);
 			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		8BFEF21C2303786F0075B08A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8BFEF21D2303788F0075B08A /* IntExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,6 +205,9 @@
 				8B9A08912286EB160002BEE5 /* LaunchScreen.storyboard in Resources */,
 				8B9A088E2286EB160002BEE5 /* Assets.xcassets in Resources */,
 				8B9A088C2286EB160002BEE5 /* Main.storyboard in Resources */,
+				8B1498CA2303714C00F50613 /* model_2019_07_21_07_08.tflite in Resources */,
+				8B1498CC2303714C00F50613 /* wheeltest.png in Resources */,
+				8B1498CB2303714C00F50613 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,15 +245,21 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ARCarstom/Pods-ARCarstom-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/PortalMask/PortalMask.framework",
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PortalMask.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -259,15 +273,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B97AA62228C284200C6E270 /* ColorExtension.swift in Sources */,
-				8BCBE665229A0343002F6EB0 /* DeviceHelper.swift in Sources */,
-				8B8C5CB8229C7BF6008BC0F2 /* CustomGestureRecognizer.swift in Sources */,
-				8B8AB4B622A26FED009D5D3E /* ShopView.swift in Sources */,
-				8B8C5CBA229C8562008BC0F2 /* ColorGestureRecognizer.swift in Sources */,
+				8BFEF21E2303788F0075B08A /* IntExtensions.swift in Sources */,
 				8B9A08892286EB160002BEE5 /* ViewController.swift in Sources */,
-				8B8C5CBC229C8575008BC0F2 /* File.swift in Sources */,
 				8B9A08852286EB160002BEE5 /* AppDelegate.swift in Sources */,
-				8BCBE6632299FCAB002F6EB0 /* Directions.swift in Sources */,
+				8B1498D02303715500F50613 /* WatchDog.swift in Sources */,
+				8B1498CF2303715500F50613 /* UIImage+PixelBuffer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
