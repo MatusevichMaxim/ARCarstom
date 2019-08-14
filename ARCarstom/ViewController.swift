@@ -20,6 +20,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var interpreter: ModelInterpreter!
     var ioOptions: ModelInputOutputOptions!
     var lastProcessedFrame: ARFrame?
+    var frameCenter: CGPoint = CGPoint.zero
     
     var lifecycleWatchDog = WatchDog(named: "AI Testing")
     
@@ -74,6 +75,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         guard let anchorPlane = anchor as? ARPlaneAnchor else { return }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            
+        }
     }
     
     func create(_ name: String, anchor: ARPlaneAnchor) -> SCNNode {
@@ -214,6 +221,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     let offset = 512 / frameSize.width
                     
                     self.mask.frame = CGRect(x: frameSize.minX + (CGFloat)(minX) / offset, y: frameSize.minY + (CGFloat)(minY) / offset, width: (CGFloat)(maxX - minX) / offset, height: (CGFloat)(maxY - minY) / offset)
+                    
+                    self.frameCenter = CGPoint(x: self.mask.frame.minX + self.mask.frame.width / 2, y: self.mask.frame.minY + self.mask.frame.height / 2)
                 }
                 
             } catch let error {
