@@ -24,7 +24,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var ioOptions: ModelInputOutputOptions!
     
     var lastProcessedFrame: ARFrame?
-    var frameCenter: CGPoint = CGPoint.zero
+    var detectedFrame: CGRect = CGRect.zero
     
     var lifecycleWatchDog = WatchDog(named: "AI Testing")
     
@@ -43,6 +43,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if loadModel() {
             buildInterpreter()
         }
+        
+        setupSwipes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,6 +84,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if touches.first != nil {
+            
             let gridMaterial = SCNMaterial()
             gridMaterial.diffuse.contents = UIColor.white.withAlphaComponent(0.0)
             planeNode?.geometry?.materials = [gridMaterial]
@@ -233,7 +236,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     let frameSize = self.frameRect.frame
                     let offset = 512 / frameSize.width
                     
-                    self.detectedMask.frame = CGRect(x: frameSize.minX + (CGFloat)(minX) / offset, y: frameSize.minY + (CGFloat)(minY) / offset, width: (CGFloat)(maxX - minX) / offset, height: (CGFloat)(maxY - minY) / offset)
+                    self.detectedFrame = CGRect(x: frameSize.minX + (CGFloat)(minX) / offset, y: frameSize.minY + (CGFloat)(minY) / offset, width: (CGFloat)(maxX - minX) / offset, height: (CGFloat)(maxY - minY) / offset)
+                    
+                    self.detectedMask.frame = self.detectedFrame
                     
                     if self.rimAdded {
                         self.rimScene.isHidden = false
@@ -242,7 +247,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 }
                 else {
                     self.detectedMask.frame = CGRect.zero
-                    self.frameCenter = CGPoint.zero
                     
                     if self.rimAdded {
                         self.rimScene.isHidden = true
@@ -256,10 +260,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func updateRimCoords() {
-        frameCenter = CGPoint(x: detectedMask.frame.minX + detectedMask.frame.width / 2, y: detectedMask.frame.minY + detectedMask.frame.height / 2)
-        
-        let hitTestCenter = sceneView.hitTest(CGPoint(x: frameCenter.x, y: frameCenter.y), types: .existingPlane)
-        let hitTestRight = sceneView.hitTest(CGPoint(x: detectedMask.frame.maxX, y: detectedMask.frame.midY), types: .existingPlane)
+        let hitTestCenter = sceneView.hitTest(CGPoint(x: detectedFrame.midX, y: detectedFrame.midY), types: .existingPlane)
+        let hitTestRight = sceneView.hitTest(CGPoint(x: detectedFrame.maxX, y: detectedFrame.midY), types: .existingPlane)
         
         var centerCoord: SCNVector3?
         var rightCoord: SCNVector3?
@@ -273,12 +275,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         if centerCoord != nil && rightCoord != nil {
-            rimScene.position = centerCoord!
+//            rimScene.position = centerCoord!
             
             let distance = rightCoord! - centerCoord!
             let radius = distance.length()
             
-            rimScene.scale = SCNVector3(x: radius * 2, y: radius * 2, z: radius * 2)
+//            rimScene.scale = SCNVector3(x: radius * 2, y: radius * 2, z: radius * 2)
         }
     }
     
@@ -323,6 +325,39 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return true
         }
         return frame.timestamp - lastProcessedFrame.timestamp >= 0.9 // setup fps (ms)
+    }
+    
+    func setupSwipes() {
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeLeft.direction = .left
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeRight.direction = .right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeUp.direction = .up
+        self.view.addGestureRecognizer(swipeUp)
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeDown.direction = .down
+        self.view.addGestureRecognizer(swipeDown)
+    }
+    
+    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
+        if gesture.direction == .right {
+            rimScene.switchRim(rimAction: .Next)
+        }
+        else if gesture.direction == .left {
+            rimScene.switchRim(rimAction: .Previous)
+        }
+        else if gesture.direction == .up {
+            print("Swipe Up")
+        }
+        else if gesture.direction == .down {
+            print("Swipe Down")
+        }
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {

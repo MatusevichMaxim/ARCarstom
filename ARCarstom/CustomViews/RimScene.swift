@@ -10,10 +10,32 @@ import UIKit
 import SceneKit
 import PortalMask
 
+enum RimAction {
+    case Next
+    case Previous
+}
+
 class RimScene: SCNNode {
     
-    let wheelDiameter : CGFloat = 0.01
-    var portalDiameter : CGFloat = 0.245
+    let wheelDiameter: CGFloat = 0.01
+    var portalDiameter: CGFloat = 0.245
+    var currentRimId: Int = 0 {
+        willSet {
+            rimNodes[currentRimId].isHidden = true
+        }
+        didSet {
+            if currentRimId < 0 {
+                currentRimId = rimNodes.count - 1
+            }
+            
+            if currentRimId > rimNodes.count - 1 {
+                currentRimId = 0
+            }
+            
+            rimNodes[currentRimId].isHidden = false
+        }
+    }
+    
     
     var portal: PortalMask?
     var rimNodes = [SCNNode]()
@@ -67,7 +89,7 @@ class RimScene: SCNNode {
         for node in rimNodes {
             node.isHidden = true
         }
-        rimNodes.first?.isHidden = false
+        rimNodes[currentRimId].isHidden = false
     }
     
     func createRim(fromNode node : SCNNode) {
@@ -131,5 +153,13 @@ class RimScene: SCNNode {
         rimMaterial.lightingModel = .physicallyBased
         rimMaterial.metalness.contents = 1.0
         rimMaterial.roughness.contents = 0
+    }
+    
+    public func switchRim(rimAction: RimAction) {
+        if rimAction == .Next {
+            currentRimId += 1
+        } else {
+            currentRimId -= 1
+        }
     }
 }
