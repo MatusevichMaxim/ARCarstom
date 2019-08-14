@@ -21,6 +21,8 @@
 		8B9FF27722877AF900F4C969 /* scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9FF27622877AF900F4C969 /* scnassets */; };
 		8BFEF21E2303788F0075B08A /* IntExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFEF21D2303788F0075B08A /* IntExtensions.swift */; };
 		8BFEF220230381200075B08A /* RimScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFEF21F230381200075B08A /* RimScene.swift */; };
+		8BFEF2242303EC100075B08A /* VectorsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFEF2232303EC100075B08A /* VectorsHelper.swift */; };
+		8BFEF2262303EC4C0075B08A /* VectorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFEF2252303EC4C0075B08A /* VectorExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		8B9FF27622877AF900F4C969 /* scnassets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scnassets; sourceTree = "<group>"; };
 		8BFEF21D2303788F0075B08A /* IntExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensions.swift; sourceTree = "<group>"; };
 		8BFEF21F230381200075B08A /* RimScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RimScene.swift; sourceTree = "<group>"; };
+		8BFEF2232303EC100075B08A /* VectorsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorsHelper.swift; sourceTree = "<group>"; };
+		8BFEF2252303EC4C0075B08A /* VectorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +87,7 @@
 		8B97AA5F228C18AF00C6E270 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				8BFEF2232303EC100075B08A /* VectorsHelper.swift */,
 				8B1498CD2303715500F50613 /* UIImage+PixelBuffer.swift */,
 				8B1498CE2303715500F50613 /* WatchDog.swift */,
 			);
@@ -140,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				8BFEF21D2303788F0075B08A /* IntExtensions.swift */,
+				8BFEF2252303EC4C0075B08A /* VectorExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -280,6 +286,8 @@
 				8BFEF220230381200075B08A /* RimScene.swift in Sources */,
 				8B9A08892286EB160002BEE5 /* ViewController.swift in Sources */,
 				8B9A08852286EB160002BEE5 /* AppDelegate.swift in Sources */,
+				8BFEF2262303EC4C0075B08A /* VectorExtensions.swift in Sources */,
+				8BFEF2242303EC100075B08A /* VectorsHelper.swift in Sources */,
 				8B1498D02303715500F50613 /* WatchDog.swift in Sources */,
 				8B1498CF2303715500F50613 /* UIImage+PixelBuffer.swift in Sources */,
 			);

@@ -34,6 +34,8 @@ class RimScene: SCNNode {
     }
     
     func setupSceneNode() {
+        setupMaterials()
+        
         portal = PortalMask(radius: portalDiameter)
         addChildNode(portal!)
         
