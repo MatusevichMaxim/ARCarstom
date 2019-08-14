@@ -124,7 +124,6 @@
 				8B9A088F2286EB160002BEE5 /* LaunchScreen.storyboard */,
 				8B9A08922286EB160002BEE5 /* Info.plist */,
 				8B1498C92303714C00F50613 /* wheeltest.png */,
-				8BFEF21F230381200075B08A /* RimScene.swift */,
 			);
 			path = ARCarstom;
 			sourceTree = "<group>";
@@ -132,6 +131,7 @@
 		8BB52F5B22966B1000951680 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				8BFEF21F230381200075B08A /* RimScene.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
