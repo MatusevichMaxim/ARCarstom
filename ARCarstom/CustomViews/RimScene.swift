@@ -16,10 +16,9 @@ class RimScene: SCNNode {
     var portalDiameter : CGFloat = 0.245
     
     var portal: PortalMask?
-    var rim_1: SCNScene?
-    var rim_2: SCNScene?
-    var rim_3: SCNScene?
+    var rimNodes = [SCNNode]()
     var brakeScene: SCNScene?
+    var maskNode: SCNNode?
     
     var rimMaterial = SCNMaterial()
     
@@ -38,22 +37,19 @@ class RimScene: SCNNode {
         portal = PortalMask(radius: portalDiameter)
         addChildNode(portal!)
         
-        rim_1 = SCNScene(named: "scnassets/rim_1.scn")
+        let rim_1 = SCNScene(named: "scnassets/rim_1.scn")
         if let rimChildNode = rim_1?.rootNode.childNode(withName: "rim_1", recursively: true) {
-            let rimNode = createRim(fromNode: rimChildNode)
-            addChildNode(rimNode)
+            createRim(fromNode: rimChildNode)
         }
         
-        rim_2 = SCNScene(named: "scnassets/rim_2.scn")
+        let rim_2 = SCNScene(named: "scnassets/rim_2.scn")
         if let rimChildNode = rim_2?.rootNode.childNode(withName: "rim_2", recursively: true) {
-            let rimNode = createRim(fromNode: rimChildNode)
-            addChildNode(rimNode)
+            createRim(fromNode: rimChildNode)
         }
         
-        rim_3 = SCNScene(named: "scnassets/rim_3.scn")
+        let rim_3 = SCNScene(named: "scnassets/rim_3.scn")
         if let rimChildNode = rim_3?.rootNode.childNode(withName: "rim_3", recursively: true) {
-            let rimNode = createRim(fromNode: rimChildNode)
-            addChildNode(rimNode)
+            createRim(fromNode: rimChildNode)
         }
         
         brakeScene = SCNScene(named: "scnassets/brake.scn")
@@ -61,9 +57,18 @@ class RimScene: SCNNode {
             let brakeNode = createBrakeNode(childNode: brakeChildNode)
             addChildNode(brakeNode)
         }
+        
+        maskNode = createMask()
+        addChildNode(maskNode!)
+        maskNode!.position = SCNVector3(0, 0, -0.5)
+        
+        for node in rimNodes {
+            node.isHidden = true
+        }
+        rimNodes.first?.isHidden = false
     }
     
-    func createRim(fromNode node : SCNNode) -> SCNNode {
+    func createRim(fromNode node : SCNNode) {
         var rim = SCNNode()
         rim = node
         rim.position = SCNVector3(0, 0, -0.115)
@@ -71,7 +76,8 @@ class RimScene: SCNNode {
         rim.eulerAngles.y = -.pi / 2
         rim.geometry?.materials = [rimMaterial]
         
-        return rim
+        rimNodes.append(rim)
+        addChildNode(rim)
     }
     
     func createMaterial(light isLight: Bool) -> SCNMaterial {
@@ -105,5 +111,23 @@ class RimScene: SCNNode {
         bolts?.geometry?.firstMaterial = createMaterial(light: false)
         
         return brakeNode
+    }
+    
+    func createMask() -> SCNNode {
+        let maskPlane = SCNPlane(width: CGFloat(1), height: CGFloat(1))
+        let maskMaterial = SCNMaterial()
+        maskMaterial.diffuse.contents = UIImage(named: "scnassets/mask.png")
+        maskPlane.materials = [maskMaterial]
+        
+        let node = SCNNode()
+        node.geometry = maskPlane
+        
+        return node
+    }
+    
+    func setupMaterials() {
+        rimMaterial.lightingModel = .physicallyBased
+        rimMaterial.metalness.contents = 1.0
+        rimMaterial.roughness.contents = 0
     }
 }

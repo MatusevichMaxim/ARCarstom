@@ -19,10 +19,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var model: LocalModel!
     var interpreter: ModelInterpreter!
     var ioOptions: ModelInputOutputOptions!
+    
     var lastProcessedFrame: ARFrame?
     var frameCenter: CGPoint = CGPoint.zero
     
     var lifecycleWatchDog = WatchDog(named: "AI Testing")
+    
+    var rimScene = RimScene()
+    var planeNode: SCNNode?
     
     
     override func viewDidLoad() {
@@ -61,37 +65,40 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let anchorPlane = anchor as? ARPlaneAnchor else { return }
+        guard planeNode == nil else { return }
         
-        var name = "wall"
-        if anchorPlane.alignment == ARPlaneAnchor.Alignment.vertical {
-            name = "wall"
-        } else {
-            name = "floor"
-        }
-        
-        let planeNode = create(name, anchor: anchorPlane)
-        node.addChildNode(planeNode)
+        planeNode = createPlane(anchor: anchorPlane)
+        planeNode?.position = SCNVector3(anchorPlane.center.x, anchorPlane.center.y, anchorPlane.center.z)
+        node.addChildNode(planeNode!)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         guard let anchorPlane = anchor as? ARPlaneAnchor else { return }
+        planeNode?.position = SCNVector3(anchorPlane.center.x, anchorPlane.center.y, anchorPlane.center.z)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
-            
+            let gridMaterial = SCNMaterial()
+            gridMaterial.diffuse.contents = UIColor.white.withAlphaComponent(0.0)
+            planeNode?.geometry?.materials = [gridMaterial]
+            planeNode?.addChildNode(rimScene)
         }
     }
     
-    func create(_ name: String, anchor: ARPlaneAnchor) -> SCNNode {
-        let node = SCNNode()
-        node.name = name
-        node.eulerAngles = SCNVector3(90.degreesToRadians, 0, 0)
-        node.geometry = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
-        node.geometry?.firstMaterial?.diffuse.contents = name == "wall" ? #imageLiteral(resourceName: "frame") : #imageLiteral(resourceName: "wheelgrid.png")
-        node.geometry?.firstMaterial?.isDoubleSided = true
-        node.position = SCNVector3(anchor.center.x, anchor.center.y, anchor.center.z)
-        return node
+    func createPlane(anchor: ARPlaneAnchor) -> SCNNode {
+        let plane = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
+        
+        let gridMaterial = SCNMaterial()
+        gridMaterial.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
+        plane.materials = [gridMaterial]
+        
+        let planeNode = SCNNode()
+        planeNode.position = SCNVector3(anchor.center.x, 0, anchor.center.z)
+        planeNode.transform = SCNMatrix4MakeRotation(-Float.pi/2, 1, 0, 0)
+        planeNode.geometry = plane
+        
+        return planeNode
     }
     
     func removeNode(named: String) {
