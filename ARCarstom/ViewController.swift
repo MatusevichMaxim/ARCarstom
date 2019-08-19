@@ -17,6 +17,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet var frameRect: UIImageView!
     @IBOutlet var detectedMask: UIView!
     
+    var sessionConfig = ARWorldTrackingConfiguration()
+    var lifecycleWatchDog = WatchDog(named: "AI Testing")
+    
     var rimAdded = false
     
     var model: LocalModel!
@@ -25,35 +28,32 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     var lastProcessedFrame: ARFrame?
     var detectedFrame: CGRect = CGRect.zero
-    
-    var lifecycleWatchDog = WatchDog(named: "AI Testing")
+    var screenCenter: CGPoint?
     
     var rimScene = RimScene()
-    var planeNode: SCNNode?
+//    var planeNode: SCNNode?
     
+    
+    // MARK: initialization
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sceneView.delegate = self
-        sceneView.session.delegate = self
-        sceneView.showsStatistics = false
-        sceneView.autoenablesDefaultLighting = true
+        setupScene()
+        setupSwipes()
         
         if loadModel() {
             buildInterpreter()
         }
-        
-        setupSwipes()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = .vertical
-        sceneView.session.run(configuration)
-        sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+        // Prevent the screen from being dimmed after a while.
+        UIApplication.shared.isIdleTimerDisabled = true
+        
+        restartPlaneDetection()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -62,24 +62,50 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.session.pause()
     }
     
+    func setupScene() {
+        sceneView.delegate = self
+        sceneView.session.delegate = self
+        sceneView.showsStatistics = false
+        sceneView.autoenablesDefaultLighting = true
+        //sceneView.showsStatistics = true
+        
+        DispatchQueue.main.async {
+            self.screenCenter = self.sceneView.bounds.mid
+        }
+        
+        if let camera = sceneView.pointOfView?.camera {
+            camera.wantsHDR = true
+            camera.wantsExposureAdaptation = true
+            camera.exposureOffset = -1
+            camera.minimumExposure = -1
+        }
+    }
+    
+    func restartPlaneDetection() {
+        
+        // configure session
+        sessionConfig.planeDetection = .vertical
+        sceneView.session.run(sessionConfig, options: [.resetTracking, .removeExistingAnchors])
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        DispatchQueue.main.async {
+            if let planeAnchor = anchor as? ARPlaneAnchor {
+                self.addPlane(node: node, anchor: planeAnchor)
+            }
+        }
+    }
+    
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         DispatchQueue.global().async() {
             self.updateCoreML(with: frame)
         }
     }
     
-    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        guard let anchorPlane = anchor as? ARPlaneAnchor else { return }
-        guard planeNode == nil else { return }
-        
-        planeNode = createPlane(anchor: anchorPlane)
-        planeNode?.position = SCNVector3(anchorPlane.center.x, anchorPlane.center.y, anchorPlane.center.z)
-        node.addChildNode(planeNode!)
-    }
-    
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         guard let anchorPlane = anchor as? ARPlaneAnchor else { return }
-        planeNode?.position = SCNVector3(anchorPlane.center.x, anchorPlane.center.y, anchorPlane.center.z)
+        
+//        planeNode?.position = SCNVector3(anchorPlane.center.x, anchorPlane.center.y, anchorPlane.center.z)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -87,27 +113,36 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             let gridMaterial = SCNMaterial()
             gridMaterial.diffuse.contents = UIColor.white.withAlphaComponent(0.0)
-            planeNode?.geometry?.materials = [gridMaterial]
-            planeNode?.addChildNode(rimScene)
+//            planeNode?.geometry?.materials = [gridMaterial]
+            sceneView.scene.rootNode.addChildNode(rimScene)
             
             rimAdded = true
         }
     }
     
-    func createPlane(anchor: ARPlaneAnchor) -> SCNNode {
+    // MARK: - Planes
+    
+    func addPlane(node: SCNNode, anchor: ARPlaneAnchor) {
+        
+        let pos = SCNVector3.positionFromTransform(anchor.transform)
+        print("NEW SURFACE DETECTED AT \(pos.friendlyString())")
+        
         let plane = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
         
         let gridMaterial = SCNMaterial()
         gridMaterial.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
         plane.materials = [gridMaterial]
-        
-        let planeNode = SCNNode()
-        planeNode.name = planeName
-        planeNode.position = SCNVector3(anchor.center.x, 0, anchor.center.z)
-        planeNode.transform = SCNMatrix4MakeRotation(-Float.pi/2, 1, 0, 0)
-        planeNode.geometry = plane
-        
-        return planeNode
+
+//        planeNode = SCNNode()
+//        planeNode?.name = planeName
+//        planeNode?.position = SCNVector3(anchor.center.x, anchor.center.y, anchor.center.z)
+//        planeNode?.transform = SCNMatrix4MakeRotation(-Float.pi/2, 1, 0, 0)
+//        planeNode?.geometry = plane
+//        node.addChildNode(planeNode!)
+    }
+    
+    func updatePlane(anchor: ARPlaneAnchor) {
+//        planeNode?.position = SCNVector3Make(anchor.center.x, anchor.center.y, anchor.center.z)
     }
     
     func removeNode(named: String) {
@@ -118,24 +153,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    func updateCoreML(with frame: ARFrame) {
-        guard shouldProcessFrame(frame) else { return }
-        lastProcessedFrame = frame
-        
-        var croppedImage : UIImage?
-        
-        DispatchQueue.main.async {
-            let image = self.sceneView.snapshot()
-            let frameSize = self.frameRect.frame
-            let scale = UIScreen.main.scale
-            
-            croppedImage = UIImage(cgImage: (image.cgImage?.cropping(to: CGRect(x: image.size.width / 2 - frameSize.width / 2 * scale, y: image.size.height / 2 -   frameSize.height / 2 * scale, width: frameSize.width * scale, height: frameSize.height * scale)))!).resizeTo(with: CGSize(width: 512, height: 512))
-            
-            if croppedImage != nil {
-                self.startWork(image: UIImage(named: "wheeltest.png")!.cgImage!) //croppedImage!.cgImage!)
-            }
-        }
-    }
+    // MARK: Image processing
     
     private func startWork(image: CGImage) {
         
@@ -259,30 +277,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    func updateRimCoords() {
-        let hitTestCenter = sceneView.hitTest(CGPoint(x: detectedFrame.midX, y: detectedFrame.midY), types: .existingPlane)
-        let hitTestRight = sceneView.hitTest(CGPoint(x: detectedFrame.maxX, y: detectedFrame.midY), types: .existingPlane)
-        
-        var centerCoord: SCNVector3?
-        var rightCoord: SCNVector3?
-        
-        if let hitTest = hitTestCenter.first {
-            centerCoord = SCNVector3(hitTest.worldTransform.columns.3.x, hitTest.worldTransform.columns.3.y, rimScene.position.z)
-        }
-        
-        if let hitTest = hitTestRight.first {
-            rightCoord = SCNVector3(hitTest.worldTransform.columns.3.x, hitTest.worldTransform.columns.3.y, rimScene.position.z)
-        }
-        
-        if centerCoord != nil && rightCoord != nil {
-//            rimScene.position = centerCoord!
-            
-            let distance = rightCoord! - centerCoord!
-            let radius = distance.length()
-            
-//            rimScene.scale = SCNVector3(x: radius * 2, y: radius * 2, z: radius * 2)
-        }
-    }
+    // MARK: Model initialization
     
     private func loadModel() -> Bool {
         guard let modelPath = Bundle.main.path(forResource: modelName, ofType: modelType)
@@ -319,6 +314,55 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         ioOptions = _ioOptions
     }
     
+    // MARK: Updating coords
+    
+    func updateCoreML(with frame: ARFrame) {
+        guard shouldProcessFrame(frame) else { return }
+        lastProcessedFrame = frame
+        
+        var croppedImage : UIImage?
+        
+        DispatchQueue.main.async {
+            let image = self.sceneView.snapshot()
+            let frameSize = self.frameRect.frame
+            let scale = UIScreen.main.scale
+            
+            croppedImage = UIImage(cgImage: (image.cgImage?.cropping(to: CGRect(x: image.size.width / 2 - frameSize.width / 2 * scale, y: image.size.height / 2 -   frameSize.height / 2 * scale, width: frameSize.width * scale, height: frameSize.height * scale)))!).resizeTo(with: CGSize(width: 512, height: 512))
+            
+            if croppedImage != nil {
+                self.startWork(image: UIImage(named: "wheeltest.png")!.cgImage!) //croppedImage!.cgImage!)
+            }
+        }
+    }
+    
+    func updateRimCoords() {
+        var hitTestOptions = [SCNHitTestOption: Any]()
+        hitTestOptions[SCNHitTestOption.boundingBoxOnly] = true
+        
+        let hitTestCenter = sceneView.hitTest(CGPoint(x: detectedFrame.midX, y: detectedFrame.midY), types: .featurePoint)
+        let hitTestRight = sceneView.hitTest(CGPoint(x: detectedFrame.maxX, y: detectedFrame.midY), types: .featurePoint)
+        
+        var centerCoord: SCNVector3?
+        var rightCoord: SCNVector3?
+        
+        if let hitResult = hitTestCenter.first {
+            centerCoord = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
+        }
+        
+        if let hitResult = hitTestRight.first {
+            rightCoord = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
+        }
+        
+        if centerCoord != nil && rightCoord != nil {
+            rimScene.position = centerCoord!
+            
+            let distance = rightCoord! - centerCoord!
+            let radius = distance.length()
+            
+            rimScene.scale = SCNVector3(x: radius * 2, y: radius * 2, z: radius * 2)
+        }
+    }
+    
     private func shouldProcessFrame(_ frame: ARFrame) -> Bool {
         guard let lastProcessedFrame = lastProcessedFrame else {
             // Always process the first frame
@@ -326,6 +370,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         return frame.timestamp - lastProcessedFrame.timestamp >= 0.9 // setup fps (ms)
     }
+    
+    // MARK: Gestures
     
     func setupSwipes() {
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
@@ -346,6 +392,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
+        guard rimAdded else { return }
+        
         if gesture.direction == .right {
             rimScene.switchRim(rimAction: .Next)
         }
@@ -359,6 +407,81 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             print("Swipe Down")
         }
     }
+    
+    // MARK: Convertion
+    
+    var dragOnInfinitePlanesEnabled = false
+    
+    func worldPositionFromScreenPosition(_ position: CGPoint,
+                                         objectPos: SCNVector3?,
+                                         infinitePlane: Bool = false) -> (position: SCNVector3?, planeAnchor: ARPlaneAnchor?, hitAPlane: Bool) {
+        
+        // -------------------------------------------------------------------------------
+        // 1. Always do a hit test against exisiting plane anchors first.
+        //    (If any such anchors exist & only within their extents.)
+        
+        let planeHitTestResults = sceneView.hitTest(position, types: .existingPlaneUsingExtent)
+        if let result = planeHitTestResults.first {
+            
+            let planeHitTestPosition = SCNVector3.positionFromTransform(result.worldTransform)
+            let planeAnchor = result.anchor
+            
+            // Return immediately - this is the best possible outcome.
+            return (planeHitTestPosition, planeAnchor as? ARPlaneAnchor, true)
+        }
+        
+        // -------------------------------------------------------------------------------
+        // 2. Collect more information about the environment by hit testing against
+        //    the feature point cloud, but do not return the result yet.
+        
+        var featureHitTestPosition: SCNVector3?
+        var highQualityFeatureHitTestResult = false
+        
+        let highQualityfeatureHitTestResults = sceneView.hitTestWithFeatures(position, coneOpeningAngleInDegrees: 18, minDistance: 0.2, maxDistance: 2.0)
+        
+        if !highQualityfeatureHitTestResults.isEmpty {
+            let result = highQualityfeatureHitTestResults[0]
+            featureHitTestPosition = result.position
+            highQualityFeatureHitTestResult = true
+        }
+        
+        // -------------------------------------------------------------------------------
+        // 3. If desired or necessary (no good feature hit test result): Hit test
+        //    against an infinite, horizontal plane (ignoring the real world).
+        
+        if (infinitePlane && dragOnInfinitePlanesEnabled) || !highQualityFeatureHitTestResult {
+            
+            let pointOnPlane = objectPos ?? SCNVector3Zero
+            
+            let pointOnInfinitePlane = sceneView.hitTestWithInfiniteHorizontalPlane(position, pointOnPlane)
+            if pointOnInfinitePlane != nil {
+                return (pointOnInfinitePlane, nil, true)
+            }
+        }
+        
+        // -------------------------------------------------------------------------------
+        // 4. If available, return the result of the hit test against high quality
+        //    features if the hit tests against infinite planes were skipped or no
+        //    infinite plane was hit.
+        
+        if highQualityFeatureHitTestResult {
+            return (featureHitTestPosition, nil, false)
+        }
+        
+        // -------------------------------------------------------------------------------
+        // 5. As a last resort, perform a second, unfiltered hit test against features.
+        //    If there are no features in the scene, the result returned here will be nil.
+        
+        let unfilteredFeatureHitTestResults = sceneView.hitTestWithFeatures(position)
+        if !unfilteredFeatureHitTestResults.isEmpty {
+            let result = unfilteredFeatureHitTestResults[0]
+            return (result.position, nil, false)
+        }
+        
+        return (nil, nil, false)
+    }
+    
+    // MARK: Empty session functions
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         
