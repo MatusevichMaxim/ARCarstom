@@ -16,10 +16,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet var frameRect: UIImageView!
     @IBOutlet var detectedMask: UIView!
+    @IBOutlet var lockButton: UIButton!
+    @IBOutlet var trashButton: UIButton!
     
     var sessionConfig = ARWorldTrackingConfiguration()
     var lifecycleWatchDog = WatchDog(named: "AI Testing")
     
+    var detectionMode = DetectionMode.unlocked
     var rimAdded = false
     
     var model: LocalModel!
@@ -81,24 +84,25 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func restartPlaneDetection() {
-        
         // configure session
         sessionConfig.planeDetection = .vertical
         sceneView.session.run(sessionConfig, options: [.resetTracking, .removeExistingAnchors])
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        guard detectionMode == .unlocked else { return }
         DispatchQueue.global().async() {
             self.updateCoreML(with: frame)
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard !rimAdded else { return }
         if touches.first != nil {
-            
             sceneView.scene.rootNode.addChildNode(rimScene)
             
             rimAdded = true
+            trashButton.isHidden = false
         }
     }
     
@@ -269,6 +273,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // initialize members
         interpreter = _interpreter
         ioOptions = _ioOptions
+        lifecycleWatchDog.logDuration(withDescription: "Interpreter ready!")
     }
     
     // MARK: Updating coords
@@ -293,6 +298,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func updateRimCoords() {
+        guard detectionMode == .unlocked else { return }
+        
         var hitTestOptions = [SCNHitTestOption: Any]()
         hitTestOptions[SCNHitTestOption.boundingBoxOnly] = true
         
@@ -328,7 +335,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return frame.timestamp - lastProcessedFrame.timestamp >= 0.9 // setup fps (ms)
     }
     
-    // MARK: Gestures
+    // MARK: Gestures & actions
     
     func setupSwipes() {
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
@@ -363,6 +370,44 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         else if gesture.direction == .down {
             print("Swipe Down")
         }
+    }
+    
+    @IBAction func onLockClicked(_ sender: Any) {
+        guard rimAdded else { return }
+        
+        switch detectionMode {
+        case .locked:
+            UIView.animate(withDuration: 0.2, animations: {
+                self.frameRect.alpha = 0.7
+                self.lockButton.alpha = 0.7
+            }, completion: { finished in
+                self.detectionMode = .unlocked
+                self.lockButton.setImage(UIImage(named: "unlocked"), for: .normal)
+            })
+            break
+        case .unlocked:
+            UIView.animate(withDuration: 0.2, animations: {
+                self.frameRect.alpha = 0
+                self.lockButton.alpha = 0.3
+            }, completion: { finished in
+                self.detectionMode = .locked
+                self.lockButton.setImage(UIImage(named: "locked"), for: .normal)
+            })
+            break
+        }
+    }
+    
+    @IBAction func onTrashClicked(_ sender: Any) {
+        guard rimAdded else { return }
+        
+        rimScene.removeFromParentNode()
+        
+        rimAdded = false
+        trashButton.isHidden = true
+        detectionMode = .unlocked
+        frameRect.alpha = 0.7
+        lockButton.alpha = 0.7
+        lockButton.setImage(UIImage(named: "unlocked"), for: .normal)
     }
     
     // MARK: Empty session functions

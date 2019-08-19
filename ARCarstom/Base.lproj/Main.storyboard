@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -9,16 +13,16 @@
         <!--View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="CarstomApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="ARCarstom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="U0K-SW-4ec">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </arscnView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="frame" translatesAutoresizingMaskIntoConstraints="NO" id="yhM-hu-g68">
-                                <rect key="frame" x="60" y="60" width="480" height="480"/>
+                                <rect key="frame" x="60" y="278.66666666666669" width="255" height="255.00000000000006"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="yhM-hu-g68" secondAttribute="height" multiplier="1:1" id="EzW-Bf-41J"/>
                                 </constraints>
@@ -28,13 +32,39 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.072387332530000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
+                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FiJ-38-daK">
+                                <rect key="frame" x="162.66666666666666" y="573.66666666666663" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="349-D5-Zw4"/>
+                                    <constraint firstAttribute="height" constant="50" id="tmE-cg-Cuf"/>
+                                </constraints>
+                                <state key="normal" image="unlocked"/>
+                                <connections>
+                                    <action selector="onLockClicked:" destination="BV1-FR-VrT" eventType="touchUpInside" id="GJ1-RI-0HF"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qlO-8d-33r">
+                                <rect key="frame" x="30" y="728" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="1z5-EY-Xjl"/>
+                                    <constraint firstAttribute="width" constant="30" id="atM-gS-G2j"/>
+                                </constraints>
+                                <state key="normal" image="trash"/>
+                                <connections>
+                                    <action selector="onTrashClicked:" destination="BV1-FR-VrT" eventType="touchUpInside" id="u7T-Yb-btD"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="yhM-hu-g68" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" constant="60" id="6VM-A2-yXP"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
                             <constraint firstAttribute="trailing" secondItem="yhM-hu-g68" secondAttribute="trailing" constant="60" id="KeW-Uc-VGA"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="qlO-8d-33r" secondAttribute="bottom" constant="20" id="Qhn-fD-fXk"/>
+                            <constraint firstItem="FiJ-38-daK" firstAttribute="top" secondItem="yhM-hu-g68" secondAttribute="bottom" constant="40" id="SCG-vP-Aao"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="U0K-SW-4ec" secondAttribute="bottom" id="VpT-BR-CcM"/>
+                            <constraint firstItem="qlO-8d-33r" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" constant="30" id="WeQ-zz-0yp"/>
+                            <constraint firstItem="FiJ-38-daK" firstAttribute="centerX" secondItem="BrB-h1-WRS" secondAttribute="centerX" id="XuT-CQ-1L4"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
                             <constraint firstItem="yhM-hu-g68" firstAttribute="centerX" secondItem="BrB-h1-WRS" secondAttribute="centerX" id="dXS-oc-mhf"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
@@ -45,7 +75,9 @@
                     <connections>
                         <outlet property="detectedMask" destination="qOC-Hv-btm" id="eic-Eq-gmx"/>
                         <outlet property="frameRect" destination="yhM-hu-g68" id="Tvz-lF-b50"/>
+                        <outlet property="lockButton" destination="FiJ-38-daK" id="SWL-uF-SEI"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="trashButton" destination="qlO-8d-33r" id="gtH-dn-DAw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
@@ -54,5 +86,7 @@
     </scenes>
     <resources>
         <image name="frame" width="1024" height="1024"/>
+        <image name="trash" width="512" height="512"/>
+        <image name="unlocked" width="512" height="512"/>
     </resources>
 </document>
