@@ -314,7 +314,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             rimScene.position = centerCoord!
             
             let distance = rightCoord! - centerCoord!
-            let radius = distance.length()
+            let radius = distance.length() * 2
             
             rimScene.scale = SCNVector3(x: radius * 2, y: radius * 2, z: radius * 2)
         }
