@@ -36,6 +36,19 @@ class RimScene: SCNNode {
         }
     }
     
+    var currentRimColorId: Int = 0 {
+        didSet {
+            if currentRimColorId < 0 {
+                currentRimColorId = rimColors.count - 1
+            }
+            
+            if currentRimColorId > rimColors.count - 1 {
+                currentRimColorId = 0
+            }
+            
+            rimMaterial.diffuse.contents = rimColors[currentRimId]
+        }
+    }
     
     var portal: PortalMask?
     var rimNodes = [SCNNode]()
@@ -43,6 +56,7 @@ class RimScene: SCNNode {
     var maskNode: SCNNode?
     
     var rimMaterial = SCNMaterial()
+    var rimColors = [UIColor.white, UIColor.black, UIColor(red: 191, green: 155, blue: 48)]
     
     
     override init() {
@@ -57,7 +71,7 @@ class RimScene: SCNNode {
     
     func setupSceneNode() {
         setupMaterials()
-        
+    
         portal = PortalMask(radius: portalDiameter)
         addChildNode(portal!)
         
@@ -153,6 +167,14 @@ class RimScene: SCNNode {
         rimMaterial.lightingModel = .physicallyBased
         rimMaterial.metalness.contents = 1.0
         rimMaterial.roughness.contents = 0
+    }
+    
+    func switchColor(rimAction: RimAction) {
+        if rimAction == .Next {
+            currentRimColorId += 1
+        } else {
+            currentRimColorId -= 1
+        }
     }
     
     public func switchRim(rimAction: RimAction) {

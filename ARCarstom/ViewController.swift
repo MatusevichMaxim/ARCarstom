@@ -18,6 +18,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet var detectedMask: UIView!
     @IBOutlet var lockButton: UIButton!
     @IBOutlet var trashButton: UIButton!
+    @IBOutlet var detectedMessage: UILabel!
     
     var sessionConfig = ARWorldTrackingConfiguration()
     var lifecycleWatchDog = WatchDog(named: "AI Testing")
@@ -69,7 +70,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.session.delegate = self
         sceneView.showsStatistics = false
         sceneView.autoenablesDefaultLighting = true
-        //sceneView.showsStatistics = true
         
         DispatchQueue.main.async {
             self.screenCenter = self.sceneView.bounds.mid
@@ -127,9 +127,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             else { return }
         
         context.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
-        guard let imageData = context.data else {
-            return
-        }
+        guard let imageData = context.data else { return }
         
         let inputs = ModelInputs()
         var inputData = Data()
@@ -162,12 +160,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             print("[SetupInput] Failed to add input: \(error)")
         }
         
+        UIGraphicsEndImageContext();
+        
         interpreter.run(inputs: inputs, options: ioOptions) { (outputs, error) in
             guard error == nil, let outputs = outputs else {
                 print("[Interpreter] Interpreter error")
                 if (error != nil) {
                     print(error!)
                 }
+                
+                self.detectedMessage.isHidden = true
                 return
             }
             
@@ -175,7 +177,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             do {
                 let result = try outputs.output(index: 0) as! [NSArray]
-                
                 numberArray = result.first as! [NSArray]
                 
                 var minX : Int = 512
@@ -183,35 +184,48 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 var minY : Int = 512
                 var maxY : Int = 0
                 
+                UIGraphicsBeginImageContextWithOptions(CGSize(width: 512, height: 512), true, 1);
+                let imageContext = UIGraphicsGetCurrentContext();
+                
                 for x in 0 ..< numberArray.count {
                     for y in 0 ..< numberArray[x].count {
-                        let first = (numberArray[x][y] as! NSArray).firstObject as! Float32
-                        let second = (numberArray[x][y] as! NSArray).lastObject as! Float32
+                        let first = (numberArray[x][y] as! NSArray).firstObject as! NSNumber
+                        let second = (numberArray[x][y] as! NSArray).lastObject as! NSNumber
                         
-                        if (first > second) {
-                            
+                        var pixelColor: UIColor = .black
+                        if (first.floatValue > second.floatValue) {
+                            pixelColor = UIColor.black
                         }
                         else {
+                            pixelColor = UIColor.green
                             if minX > x {
                                 minX = x
                             }
-                            
+
                             if maxX < x {
                                 maxX = x
                             }
-                            
+
                             if minY > y {
                                 minY = y
                             }
-                            
+
                             if maxY < y {
                                 maxY = y
                             }
                         }
+                        
+                        imageContext?.setFillColor(pixelColor.cgColor)
+                        imageContext?.fill(CGRect(x: x, y: y, width: 1, height: 1))
                     }
                 }
                 
+                let outputImage = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                
                 if (minX != 512 && minY != 512 && maxX != 0 && maxY != 0) {
+                    self.detectedMessage.isHidden = false
+                    
                     let frameSize = self.frameRect.frame
                     let offset = 512 / frameSize.width
                     
@@ -225,6 +239,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                 }
                 else {
+                    self.detectedMessage.isHidden = true
                     self.detectedMask.frame = CGRect.zero
                     
                     if self.rimAdded {
@@ -289,10 +304,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let frameSize = self.frameRect.frame
             let scale = UIScreen.main.scale
             
-            croppedImage = UIImage(cgImage: (image.cgImage?.cropping(to: CGRect(x: image.size.width / 2 - frameSize.width / 2 * scale, y: image.size.height / 2 -   frameSize.height / 2 * scale, width: frameSize.width * scale, height: frameSize.height * scale)))!).resizeTo(with: CGSize(width: 512, height: 512))
+            croppedImage = UIImage(cgImage: (image.cgImage?.cropping(to: CGRect(x: image.size.width / 2 - frameSize.width / 2 * scale, y: image.size.height / 2 - frameSize.height / 2 * scale, width: frameSize.width * scale, height: frameSize.height * scale)))!).resizeTo(with: CGSize(width: 512, height: 512))
             
             if croppedImage != nil {
-                self.startWork(image: UIImage(named: "wheeltest.png")!.cgImage!) //croppedImage!.cgImage!)
+                self.startWork(image: UIImage(named: "wheeltest.png")!.cgImage!)//croppedImage!.cgImage!)//UIImage(named: "wheeltest.png")!.cgImage!)
             }
         }
     }
@@ -365,10 +380,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             rimScene.switchRim(rimAction: .Previous)
         }
         else if gesture.direction == .up {
-            print("Swipe Up")
+            rimScene.switchColor(rimAction: .Next)
         }
         else if gesture.direction == .down {
-            print("Swipe Down")
+            rimScene.switchColor(rimAction: .Previous)
         }
     }
     
@@ -382,6 +397,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self.lockButton.alpha = 0.7
             }, completion: { finished in
                 self.detectionMode = .unlocked
+                self.detectedMask.isHidden = false
                 self.lockButton.setImage(UIImage(named: "unlocked"), for: .normal)
             })
             break
@@ -391,6 +407,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self.lockButton.alpha = 0.3
             }, completion: { finished in
                 self.detectionMode = .locked
+                self.detectedMask.isHidden = true
                 self.lockButton.setImage(UIImage(named: "locked"), for: .normal)
             })
             break
@@ -408,6 +425,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         frameRect.alpha = 0.7
         lockButton.alpha = 0.7
         lockButton.setImage(UIImage(named: "unlocked"), for: .normal)
+        detectedMask.isHidden = false
     }
     
     // MARK: Empty session functions
