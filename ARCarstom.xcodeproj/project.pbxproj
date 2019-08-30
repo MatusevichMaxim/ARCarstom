@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		855EBC566F608DA2A35BE96C /* Pods_ARCarstom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */; };
+		8B02E8EC231918F40036BE3B /* vision_model_v2.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 8B02E8EB231918F40036BE3B /* vision_model_v2.tflite */; };
+		8B02E8F12319408B0036BE3B /* rim.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B02E8F02319408B0036BE3B /* rim.png */; };
 		8B1498CA2303714C00F50613 /* model_2019_07_21_07_08.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 8B1498C72303714B00F50613 /* model_2019_07_21_07_08.tflite */; };
 		8B1498CB2303714C00F50613 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B1498C82303714C00F50613 /* GoogleService-Info.plist */; };
 		8B1498CC2303714C00F50613 /* wheeltest.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1498C92303714C00F50613 /* wheeltest.png */; };
@@ -33,6 +35,8 @@
 		2DF95171F16519515772A046 /* Pods-ARCarstom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARCarstom.release.xcconfig"; path = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.release.xcconfig"; sourceTree = "<group>"; };
 		64C87AE5DC28C89C4DDFA870 /* Pods_ARCarstom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARCarstom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		87B6D79152EB5E75343C8677 /* Pods-ARCarstom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARCarstom.debug.xcconfig"; path = "Target Support Files/Pods-ARCarstom/Pods-ARCarstom.debug.xcconfig"; sourceTree = "<group>"; };
+		8B02E8EB231918F40036BE3B /* vision_model_v2.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = vision_model_v2.tflite; sourceTree = "<group>"; };
+		8B02E8F02319408B0036BE3B /* rim.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rim.png; sourceTree = "<group>"; };
 		8B1498C72303714B00F50613 /* model_2019_07_21_07_08.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = model_2019_07_21_07_08.tflite; sourceTree = "<group>"; };
 		8B1498C82303714C00F50613 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8B1498C92303714C00F50613 /* wheeltest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wheeltest.png; sourceTree = "<group>"; };
@@ -85,6 +89,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		8B02E8ED231919080036BE3B /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				8B9A088A2286EB160002BEE5 /* Main.storyboard */,
+				8B9A088F2286EB160002BEE5 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
 		8B84181D2299FC7C00BB10BC /* Enums */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +138,8 @@
 		8B9A08832286EB160002BEE5 /* ARCarstom */ = {
 			isa = PBXGroup;
 			children = (
+				8B02E8F02319408B0036BE3B /* rim.png */,
+				8B02E8ED231919080036BE3B /* Storyboards */,
 				8BFEF21C2303786F0075B08A /* Extensions */,
 				8B84181D2299FC7C00BB10BC /* Enums */,
 				8BB52F5B22966B1000951680 /* CustomViews */,
@@ -133,12 +148,11 @@
 				8B9A088D2286EB160002BEE5 /* Assets.xcassets */,
 				8B9A08842286EB160002BEE5 /* AppDelegate.swift */,
 				8B9A08882286EB160002BEE5 /* ViewController.swift */,
-				8B9A088A2286EB160002BEE5 /* Main.storyboard */,
 				8B1498C82303714C00F50613 /* GoogleService-Info.plist */,
-				8B1498C72303714B00F50613 /* model_2019_07_21_07_08.tflite */,
-				8B9A088F2286EB160002BEE5 /* LaunchScreen.storyboard */,
 				8B9A08922286EB160002BEE5 /* Info.plist */,
 				8B1498C92303714C00F50613 /* wheeltest.png */,
+				8B1498C72303714B00F50613 /* model_2019_07_21_07_08.tflite */,
+				8B02E8EB231918F40036BE3B /* vision_model_v2.tflite */,
 			);
 			path = ARCarstom;
 			sourceTree = "<group>";
@@ -222,9 +236,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B02E8F12319408B0036BE3B /* rim.png in Resources */,
 				8B9FF27722877AF900F4C969 /* scnassets in Resources */,
 				8B9A08912286EB160002BEE5 /* LaunchScreen.storyboard in Resources */,
 				8B9A088E2286EB160002BEE5 /* Assets.xcassets in Resources */,
+				8B02E8EC231918F40036BE3B /* vision_model_v2.tflite in Resources */,
 				8B9A088C2286EB160002BEE5 /* Main.storyboard in Resources */,
 				8B1498CA2303714C00F50613 /* model_2019_07_21_07_08.tflite in Resources */,
 				8B1498CC2303714C00F50613 /* wheeltest.png in Resources */,
