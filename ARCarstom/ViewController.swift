@@ -6,6 +6,7 @@ import FirebaseMLCommon
 import CoreML
 import CoreGraphics
 import Foundation
+import PureLayout
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
@@ -20,7 +21,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet var trashButton: UIButton!
     @IBOutlet var detectedMessage: UILabel!
     
-    var bottomPanel: BottomPanel = BottomPanel()
+    var bottomPanel: BottomPanelView!
     
     var sessionConfig = ARWorldTrackingConfiguration()
     var lifecycleWatchDog = WatchDog(named: "AI Testing")
@@ -44,7 +45,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        setupUI()
+        setupUI()
+        setupConstraints()
         setupScene()
         setupSwipes()
         
@@ -69,7 +71,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func setupUI() {
+        bottomPanel = BottomPanelView()
+        view.addSubview(bottomPanel!)
         
+        
+    }
+    
+    func setupConstraints() {
+        bottomPanel.autoPinEdge(toSuperviewEdge: .left, withInset: 15)
+        bottomPanel.autoPinEdge(toSuperviewEdge: .right, withInset: 15)
+        bottomPanel.autoPinEdge(toSuperviewEdge: .bottom, withInset: 32)
+        bottomPanel.autoSetDimension(.height, toSize: 72)
     }
     
     func setupScene() {
