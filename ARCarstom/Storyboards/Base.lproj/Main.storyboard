@@ -27,7 +27,7 @@
                                     <constraint firstAttribute="width" secondItem="yhM-hu-g68" secondAttribute="height" multiplier="1:1" id="EzW-Bf-41J"/>
                                 </constraints>
                             </imageView>
-                            <view userInteractionEnabled="NO" alpha="0.10000000000000001" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qOC-Hv-btm" userLabel="Mask">
+                            <view userInteractionEnabled="NO" alpha="0.40000000000000002" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qOC-Hv-btm" userLabel="Mask">
                                 <rect key="frame" x="67" y="342" width="0.0" height="0.0"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.63253288047520551" blue="0.36007063356164382" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

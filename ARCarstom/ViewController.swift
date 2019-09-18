@@ -10,7 +10,7 @@ import Foundation
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     let planeName = "plane"
-    let modelName = "vision_model_v2"
+    let modelName = "vision_model_v1"
     let modelType = "tflite"
     
     @IBOutlet var sceneView: ARSCNView!
@@ -19,6 +19,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet var lockButton: UIButton!
     @IBOutlet var trashButton: UIButton!
     @IBOutlet var detectedMessage: UILabel!
+    
+    var bottomPanel: BottomPanel = BottomPanel()
     
     var sessionConfig = ARWorldTrackingConfiguration()
     var lifecycleWatchDog = WatchDog(named: "AI Testing")
@@ -42,6 +44,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        setupUI()
         setupScene()
         setupSwipes()
         
@@ -63,6 +66,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         super.viewWillDisappear(animated)
         
         sceneView.session.pause()
+    }
+    
+    func setupUI() {
+        
     }
     
     func setupScene() {
@@ -116,8 +123,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Image processing
     
-    private func startWork(image: CGImage) {
+    private func startWork(with sourceImage: UIImage) {
         
+        let image: CGImage = sourceImage.cgImage!
         guard let context = CGContext(
             data: nil,
             width: image.width, height: image.height,
@@ -133,9 +141,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         var inputData = Data()
         
         do {
-            for row in 0 ..< 224 {
-                for col in 0 ..< 224 {
+            for row in 0 ..< 512 {
+                for col in 0 ..< 512 {
                     let offset = 4 * (col * context.width + row)
+                    // (Ignore offset 0, the unused alpha channel)
                     let red = imageData.load(fromByteOffset: offset + 1, as: UInt8.self)
                     let green = imageData.load(fromByteOffset: offset + 2, as: UInt8.self)
                     let blue = imageData.load(fromByteOffset: offset + 3, as: UInt8.self)
@@ -154,14 +163,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     inputData.append(&bytes, count: elementSize)
                 }
             }
-            
             try inputs.addInput(inputData)
+        } catch let error {
+            print("Failed to add input: \(error)")
         }
-        catch let error {
-            print("[SetupInput] Failed to add input: \(error)")
-        }
-        
-        UIGraphicsEndImageContext();
         
         interpreter.run(inputs: inputs, options: ioOptions) { (outputs, error) in
             guard error == nil, let outputs = outputs else {
@@ -174,26 +179,53 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 return
             }
             
+            var numberArray : [NSArray]
+            
             do {
-                let result = try outputs.output(index: 1) as! [NSArray]
-                var nodes = result.first! as! [NSNumber]
+                let result = try outputs.output(index: 0) as! [NSArray]
+                numberArray = result.first as! [NSArray]
                 
-                var x : CGFloat = nodes[0].floatValue < 0 ? 0 : CGFloat(nodes[0].floatValue)
-                var y : CGFloat = nodes[1].floatValue < 0 ? 0 : CGFloat(nodes[1].floatValue)
-                var width : CGFloat = CGFloat(nodes[2].floatValue)
-                var height : CGFloat = CGFloat(nodes[3].floatValue)
-                
-                var minX : Int = 224
+                var minX : Int = 512
                 var maxX : Int = 0
-                var minY : Int = 224
+                var minY : Int = 512
                 var maxY : Int = 0
                 
-                UIGraphicsBeginImageContextWithOptions(CGSize(width: 224, height: 224), true, 1);
+                UIGraphicsBeginImageContextWithOptions(CGSize(width: 512, height: 512), true, 1);
                 let imageContext = UIGraphicsGetCurrentContext();
                 
-                imageContext?.setFillColor(UIColor.red.cgColor)
-                imageContext?.fill(CGRect(x: x, y: y, width: width * 4, height: height * 4))
-
+                for x in 0 ..< numberArray.count {
+                    for y in 0 ..< numberArray[x].count {
+                        let first = (numberArray[x][y] as! NSArray).firstObject as! NSNumber
+                        let second = (numberArray[x][y] as! NSArray).lastObject as! NSNumber
+                        
+                        var pixelColor: UIColor = .black
+                        if (first.floatValue > second.floatValue) {
+                            pixelColor = UIColor.black
+                        }
+                        else {
+                            pixelColor = UIColor.green
+                            if minX > x {
+                                minX = x
+                            }
+                            
+                            if maxX < x {
+                                maxX = x
+                            }
+                            
+                            if minY > y {
+                                minY = y
+                            }
+                            
+                            if maxY < y {
+                                maxY = y
+                            }
+                        }
+                        
+                        imageContext?.setFillColor(pixelColor.cgColor)
+                        imageContext?.fill(CGRect(x: x, y: y, width: 1, height: 1))
+                    }
+                }
+                
                 let outputImage = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
                 
@@ -220,6 +252,33 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         self.rimScene.isHidden = true
                     }
                 }
+                
+//                if (minX != 512 && minY != 512 && maxX != 0 && maxY != 0) {
+//                    self.detectedMessage.isHidden = false
+//                    self.detectedMessage.numberOfLines = 0
+//
+////                    self.detectedMessage.text = "p:\(probability) x:\(x) y:\(y)"
+//
+//                    let frameSize = self.frameRect.frame
+//                    let offset = 224 / frameSize.width
+//
+//                    self.detectedFrame = CGRect(x: frameSize.minX + (CGFloat)(minX) / offset, y: frameSize.minY + (CGFloat)(minY) / offset, width: (CGFloat)(maxX - minX) / offset, height: (CGFloat)(maxY - minY) / offset)
+//
+//                    self.detectedMask.frame = self.detectedFrame
+//
+//                    if self.rimAdded {
+//                        self.rimScene.isHidden = false
+//                        self.updateRimCoords()
+//                    }
+//                }
+//                else {
+//                    self.detectedMessage.isHidden = true
+//                    self.detectedMask.frame = CGRect.zero
+//
+//                    if self.rimAdded {
+//                        self.rimScene.isHidden = true
+//                    }
+//                }
                 
             } catch let error {
                 print("[Interpreter] Failed to get result: \(error)")
@@ -254,8 +313,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let _interpreter = ModelInterpreter.modelInterpreter(options: options)
         let _ioOptions = ModelInputOutputOptions()
         do {
-            try _ioOptions.setInputFormat(index: 0, type: .float32, dimensions: [1, 224, 224, 3])
-            try _ioOptions.setOutputFormat(index: 1, type: .float32, dimensions: [1, 4])
+            try _ioOptions.setInputFormat(index: 0, type: .float32, dimensions: [1, 512, 512, 3])
+            try _ioOptions.setOutputFormat(index: 0, type: .float32, dimensions: [1, 512, 512, 2])
         } catch let error as NSError {
             print("[BuildInterpreter] Error setting up model io: \(error)")
         }
@@ -271,18 +330,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard shouldProcessFrame(frame) else { return }
         lastProcessedFrame = frame
         
-        var croppedImage : UIImage?
-        
         DispatchQueue.main.async {
             let image = self.sceneView.snapshot()
             let frameSize = self.frameRect.frame
             let scale = UIScreen.main.scale
             
-            croppedImage = UIImage(cgImage: (image.cgImage?.cropping(to: CGRect(x: image.size.width / 2 - frameSize.width / 2 * scale, y: image.size.height / 2 - frameSize.height / 2 * scale, width: frameSize.width * scale, height: frameSize.height * scale)))!).resizeTo(with: CGSize(width: 512, height: 512))
+            let croppedImage = UIImage(cgImage: (image.cgImage?.cropping(to: CGRect(x: image.size.width / 2 - frameSize.width / 2 * scale, y: image.size.height / 2 - frameSize.height / 2 * scale, width: frameSize.width * scale, height: frameSize.height * scale)))!).resizeImage(with: CGSize(width: 512, height: 512))
             
-            if croppedImage != nil {
-                self.startWork(image: UIImage(named: "rimimage")!.cgImage!)//croppedImage!.cgImage!)
-            }
+            self.startWork(with: croppedImage)
         }
     }
     
