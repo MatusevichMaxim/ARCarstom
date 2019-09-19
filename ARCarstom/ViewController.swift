@@ -48,7 +48,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         setupUI()
         setupConstraints()
         setupScene()
-        setupSwipes()
+//        setupSwipes()
         
         if loadModel() {
             buildInterpreter()
@@ -73,8 +73,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func setupUI() {
         bottomPanel = BottomPanelView()
         view.addSubview(bottomPanel!)
-        
-        
     }
     
     func setupConstraints() {
@@ -90,9 +88,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.showsStatistics = false
         sceneView.autoenablesDefaultLighting = true
         
-        DispatchQueue.main.async {
-            self.screenCenter = self.sceneView.bounds.mid
-        }
+        screenCenter = self.sceneView.bounds.mid
         
         if let camera = sceneView.pointOfView?.camera {
             camera.wantsHDR = true
@@ -110,9 +106,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         guard detectionMode == .unlocked else { return }
-        DispatchQueue.global().async() {
-            self.updateCoreML(with: frame)
-        }
+        self.updateCoreML(with: frame)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -145,13 +139,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             space: CGColorSpaceCreateDeviceRGB(),
             bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
             else { return }
-        
+
         context.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
         guard let imageData = context.data else { return }
-        
+
         let inputs = ModelInputs()
         var inputData = Data()
-        
+
         do {
             for row in 0 ..< 512 {
                 for col in 0 ..< 512 {
@@ -160,11 +154,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     let red = imageData.load(fromByteOffset: offset + 1, as: UInt8.self)
                     let green = imageData.load(fromByteOffset: offset + 2, as: UInt8.self)
                     let blue = imageData.load(fromByteOffset: offset + 3, as: UInt8.self)
-                    
+
                     var normalizedRed = (Float32(red) - 127.5) / 127.5
                     var normalizedGreen = (Float32(green) - 127.5) / 127.5
                     var normalizedBlue = (Float32(blue) - 127.5) / 127.5
-                    
+
                     let elementSize = MemoryLayout.size(ofValue: normalizedRed)
                     var bytes = [UInt8](repeating: 0, count: elementSize)
                     memcpy(&bytes, &normalizedRed, elementSize)
@@ -238,7 +232,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                 }
                 
-                let outputImage = UIGraphicsGetImageFromCurrentImageContext();
+//                let outputImage = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
                 
                 if (minX != 512 && minY != 512 && maxX != 0 && maxY != 0) {
@@ -264,34 +258,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         self.rimScene.isHidden = true
                     }
                 }
-                
-//                if (minX != 512 && minY != 512 && maxX != 0 && maxY != 0) {
-//                    self.detectedMessage.isHidden = false
-//                    self.detectedMessage.numberOfLines = 0
-//
-////                    self.detectedMessage.text = "p:\(probability) x:\(x) y:\(y)"
-//
-//                    let frameSize = self.frameRect.frame
-//                    let offset = 224 / frameSize.width
-//
-//                    self.detectedFrame = CGRect(x: frameSize.minX + (CGFloat)(minX) / offset, y: frameSize.minY + (CGFloat)(minY) / offset, width: (CGFloat)(maxX - minX) / offset, height: (CGFloat)(maxY - minY) / offset)
-//
-//                    self.detectedMask.frame = self.detectedFrame
-//
-//                    if self.rimAdded {
-//                        self.rimScene.isHidden = false
-//                        self.updateRimCoords()
-//                    }
-//                }
-//                else {
-//                    self.detectedMessage.isHidden = true
-//                    self.detectedMask.frame = CGRect.zero
-//
-//                    if self.rimAdded {
-//                        self.rimScene.isHidden = true
-//                    }
-//                }
-                
             } catch let error {
                 print("[Interpreter] Failed to get result: \(error)")
             }
@@ -342,13 +308,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard shouldProcessFrame(frame) else { return }
         lastProcessedFrame = frame
         
-        DispatchQueue.main.async {
-            let image = self.sceneView.snapshot()
-            let frameSize = self.frameRect.frame
-            let scale = UIScreen.main.scale
-            
-            let croppedImage = UIImage(cgImage: (image.cgImage?.cropping(to: CGRect(x: image.size.width / 2 - frameSize.width / 2 * scale, y: image.size.height / 2 - frameSize.height / 2 * scale, width: frameSize.width * scale, height: frameSize.height * scale)))!).resizeImage(with: CGSize(width: 512, height: 512))
-            
+        let image = self.sceneView.snapshot()
+        let frameSize = self.frameRect.frame
+        let scale = UIScreen.main.scale
+        
+        let croppedImage = UIImage(cgImage: (image.cgImage?.cropping(to: CGRect(x: image.size.width / 2 - frameSize.width / 2 * scale, y: image.size.height / 2 - frameSize.height / 2 * scale, width: frameSize.width * scale, height: frameSize.height * scale)))!).resizeImage(with: CGSize(width: 512, height: 512))
+        
+        DispatchQueue.global(qos: .userInitiated).async {
             self.startWork(with: croppedImage)
         }
     }
@@ -481,5 +447,27 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func sessionInterruptionEnded(_ session: ARSession) {
         
+    }
+    
+    private let alphaComponent = (baseOffset: 4, moduloRemainder: 3)
+    private func rgbDataFromBuffer(_ buffer: CVPixelBuffer, byteCount: Int, isModelQuantized: Bool) -> Data? {
+        CVPixelBufferLockBaseAddress(buffer, .readOnly)
+        defer { CVPixelBufferUnlockBaseAddress(buffer, .readOnly) }
+        guard let mutableRawPointer = CVPixelBufferGetBaseAddress(buffer) else {
+            return nil
+        }
+        let count = CVPixelBufferGetDataSize(buffer)
+        let bufferData = Data(bytesNoCopy: mutableRawPointer, count: count, deallocator: .none)
+        var rgbBytes = [UInt8](repeating: 0, count: byteCount)
+        var index = 0
+        for component in bufferData.enumerated() {
+            let offset = component.offset
+            let isAlphaComponent = (offset % alphaComponent.baseOffset) == alphaComponent.moduloRemainder
+            guard !isAlphaComponent else { continue }
+            rgbBytes[index] = component.element
+            index += 1
+        }
+        if isModelQuantized { return Data(_: rgbBytes) }
+        return Data(_: rgbBytes.map { (UInt8($0) - UInt8(127.5)) / UInt8(127.5) })
     }
 }

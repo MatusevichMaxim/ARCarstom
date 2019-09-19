@@ -28,6 +28,7 @@
 		8BDD96422309247300FBF635 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDD96412309247300FBF635 /* Utilities.swift */; };
 		8BDD96462309347600FBF635 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDD96452309347600FBF635 /* Plane.swift */; };
 		8BE88137231A9BB500225D34 /* ImageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE88136231A9BB500225D34 /* ImageUtil.swift */; };
+		8BEB76A52332AF9600E6249D /* BottomPanelTapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEB76A42332AF9600E6249D /* BottomPanelTapGestureRecognizer.swift */; };
 		8BEF2244230AD2F100FEDDB5 /* DetectionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEF2243230AD2F100FEDDB5 /* DetectionMode.swift */; };
 		8BFEF21E2303788F0075B08A /* IntExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFEF21D2303788F0075B08A /* IntExtensions.swift */; };
 		8BFEF220230381200075B08A /* RimScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFEF21F230381200075B08A /* RimScene.swift */; };
@@ -61,6 +62,7 @@
 		8BDD96412309247300FBF635 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		8BDD96452309347600FBF635 /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		8BE88136231A9BB500225D34 /* ImageUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtil.swift; sourceTree = "<group>"; };
+		8BEB76A42332AF9600E6249D /* BottomPanelTapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPanelTapGestureRecognizer.swift; sourceTree = "<group>"; };
 		8BEF2243230AD2F100FEDDB5 /* DetectionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DetectionMode.swift; path = ARCarstom/DetectionMode.swift; sourceTree = SOURCE_ROOT; };
 		8BFEF21D2303788F0075B08A /* IntExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensions.swift; sourceTree = "<group>"; };
 		8BFEF21F230381200075B08A /* RimScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RimScene.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				8B1498CE2303715500F50613 /* WatchDog.swift */,
 				8BDD96412309247300FBF635 /* Utilities.swift */,
 				8BE88136231A9BB500225D34 /* ImageUtil.swift */,
+				8BEB76A42332AF9600E6249D /* BottomPanelTapGestureRecognizer.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				8BDD96462309347600FBF635 /* Plane.swift in Sources */,
 				8BEF2244230AD2F100FEDDB5 /* DetectionMode.swift in Sources */,
 				8B9A08892286EB160002BEE5 /* ViewController.swift in Sources */,
+				8BEB76A52332AF9600E6249D /* BottomPanelTapGestureRecognizer.swift in Sources */,
 				8BE88137231A9BB500225D34 /* ImageUtil.swift in Sources */,
 				8B9A08852286EB160002BEE5 /* AppDelegate.swift in Sources */,
 				8BFEF2262303EC4C0075B08A /* VectorExtensions.swift in Sources */,
