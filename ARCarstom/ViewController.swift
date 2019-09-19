@@ -448,26 +448,4 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func sessionInterruptionEnded(_ session: ARSession) {
         
     }
-    
-    private let alphaComponent = (baseOffset: 4, moduloRemainder: 3)
-    private func rgbDataFromBuffer(_ buffer: CVPixelBuffer, byteCount: Int, isModelQuantized: Bool) -> Data? {
-        CVPixelBufferLockBaseAddress(buffer, .readOnly)
-        defer { CVPixelBufferUnlockBaseAddress(buffer, .readOnly) }
-        guard let mutableRawPointer = CVPixelBufferGetBaseAddress(buffer) else {
-            return nil
-        }
-        let count = CVPixelBufferGetDataSize(buffer)
-        let bufferData = Data(bytesNoCopy: mutableRawPointer, count: count, deallocator: .none)
-        var rgbBytes = [UInt8](repeating: 0, count: byteCount)
-        var index = 0
-        for component in bufferData.enumerated() {
-            let offset = component.offset
-            let isAlphaComponent = (offset % alphaComponent.baseOffset) == alphaComponent.moduloRemainder
-            guard !isAlphaComponent else { continue }
-            rgbBytes[index] = component.element
-            index += 1
-        }
-        if isModelQuantized { return Data(_: rgbBytes) }
-        return Data(_: rgbBytes.map { (UInt8($0) - UInt8(127.5)) / UInt8(127.5) })
-    }
 }
